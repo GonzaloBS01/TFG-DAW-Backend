@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "este es el repositorio de mi TFG de Desarrollo de Aplicaciones Web",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "analyze": "node_modules/.bin/eslint src --ext .js,.jsx",
     "fix": "npx eslint src --fix",
