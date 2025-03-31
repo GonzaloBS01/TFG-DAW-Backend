@@ -1,5 +1,6 @@
 import expressLoader from './express-loader.js';
 
 export default function init(server) {
-  expressLoader(server);
+    expressLoader(server);
+    mongodbLoader();
 }
