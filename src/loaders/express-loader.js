@@ -1,4 +1,3 @@
-// filepath: c:\Users\Gonzalo\Documents\GitHub\TFG-DAW-Backend\src\loaders\express-loader.js
 import express from 'express';
 import dotenv from 'dotenv';
 
