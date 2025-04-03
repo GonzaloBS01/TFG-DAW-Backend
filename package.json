@@ -5,6 +5,7 @@
     "main": "index.js",
     "type": "module",
     "scripts": {
+        "start": "node src/index.js",
         "analyze": "node_modules/.bin/eslint src --ext .js,.jsx",
         "npm ": "npx eslint src --fix",
         "test": "jest",
