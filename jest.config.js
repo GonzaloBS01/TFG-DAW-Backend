@@ -1,7 +1,7 @@
 /** @type {import('jest').Config} */
 const config = {
   transform: {
-    "\\.[jt]sx?$": "babel-jest",
+    '\\.[jt]sx?$': 'babel-jest',
   },
   verbose: true,
 };
