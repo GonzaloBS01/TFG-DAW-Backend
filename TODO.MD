@@ -1,6 +1,6 @@
 Add logger (utils con configuración en config, se recoge en utils)(Winstong) + Morgan (express loader, configuración en config)
 Rutes:
-* login +  +
+* login
     * register
     * login
     * recoverPass
