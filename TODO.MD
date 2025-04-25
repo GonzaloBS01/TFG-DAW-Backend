@@ -10,4 +10,9 @@ CRUD(implemented)
 * User
 * Products
 * Bills
-Swagger ui(not implemented) + Añadir endpoints
+Swagger ui(imlemented, falta acabar) + Añadir endpoints
+
+
+Dudas
+copilot me ha exportado las rutas como route
+donde agregar el js para que se lean los yaml

@@ -1,0 +1,166 @@
+openapi: 3.0.0
+info:
+  title: API de Facturas
+  version: 1.0.0
+  description: API para crear, obtener, actualizar y eliminar facturas.
+servers:
+  - url: http://localhost:3000/bills
+
+paths:
+  /:
+    post:
+      summary: Crear una nueva factura
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BillInput'
+      responses:
+        '201':
+          description: Factura creada exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Bill'
+        '400':
+          description: Error de validación
+
+    get:
+      summary: Obtener todas las facturas
+      responses:
+        '200':
+          description: Lista de facturas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Bill'
+        '500':
+          description: Error interno del servidor
+
+  /{id}:
+    get:
+      summary: Obtener una factura por ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Factura encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Bill'
+        '404':
+          description: Factura no encontrada
+        '500':
+          description: Error interno del servidor
+
+    put:
+      summary: Actualizar una factura
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BillInput'
+      responses:
+        '200':
+          description: Factura actualizada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Bill'
+        '400':
+          description: Error de validación
+        '404':
+          description: Factura no encontrada
+
+    delete:
+      summary: Eliminar una factura
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Factura eliminada
+        '404':
+          description: Factura no encontrada
+        '500':
+          description: Error interno del servidor
+
+components:
+  schemas:
+    Bill:
+      type: object
+      properties:
+        _id:
+          type: string
+        user:
+          $ref: '#/components/schemas/User'
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/Product'
+        total:
+          type: number
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    BillInput:
+      type: object
+      required:
+        - user
+        - products
+        - total
+      properties:
+        user:
+          type: string
+          description: ID del usuario relacionado
+        products:
+          type: array
+          items:
+            type: string
+            description: ID de productos relacionados
+        total:
+          type: number
+
+    User:
+      type: object
+      properties:
+        _id:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+
+    Product:
+      type: object
+      properties:
+        _id:
+          type: string
+        name:
+          type: string
+        price:
+          type: number
+        description:
+          type: string
