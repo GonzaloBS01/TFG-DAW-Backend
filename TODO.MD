@@ -10,7 +10,7 @@ CRUD(implemented)
 * User
 * Products
 * Bills
-Swagger ui(imlemented, falta acabar) + Añadir endpoints
+Swagger ui(imlemented, falta acabar) + Añadir endpoints(implemented)
 
 
 Dudas
