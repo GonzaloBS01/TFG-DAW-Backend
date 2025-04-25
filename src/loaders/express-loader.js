@@ -23,5 +23,5 @@ export default function expressLoader(app) {
   app.use('/api/bills', billRouter);
   app.use('/api/auth', loginRouter);
 
-  app.get('/', (req, res) => res.send('✅ API funcionando correctamente'));
+  app.get('/', (req, res) => res.send('API funcionando correctamente'));
 }
