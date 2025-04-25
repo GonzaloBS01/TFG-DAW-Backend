@@ -3,10 +3,7 @@ import dotenv from 'dotenv';
 import morganConfig from '../config/morgan-config.js';
 import swaggerUi from 'swagger-ui-express';
 import swaggerSpec from '../config/swagger-config.js';
-import userRouter from '../routes/user-router.js';
-import productRouter from '../routes/product-router.js';
-import billRouter from '../routes/bill-router.js';
-import loginRouter from '../routes/login-router.js';
+import router from '..router/index.js';
 
 dotenv.config();
 

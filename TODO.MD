@@ -1,10 +1,10 @@
-Add logger (utils con configuración en config, se recoge en utils)(Winstong) + Morgan (express loader, configuración en config)
+Add logger (utils con configuración en config, se recoge en utils)(Winstong) + Morgan (express loader, configuración en config)(implemented)
 Rutes:
 * login(imlemented, falta acabar)
     * register
     * login
     * recoverPass
-* seguridad(no lo se)
+* seguridad(not implemented)
 * roles(not implemented)
 CRUD(implemented)
 * User
