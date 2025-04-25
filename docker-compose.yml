@@ -1,16 +1,16 @@
 version: "3"
 services:
-    sonarqube:
-        image: "sonarqube"
-        ports:
-            - "2000:9000"
-            - "9092:9092"
-    mongodb:
-        image: "mongo"
-        ports:
-            - "27017:27017"
-        volumes:
-            - mongo-data:/data/db
+  sonarqube:
+    image: "sonarqube"
+    ports:
+      - "2000:9000"
+      - "9092:9092"
+  mongodb:
+    image: "mongo"
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
 volumes:
-    mongo-data:
-        driver: local
+  mongo-data:
+    driver: local

@@ -7,7 +7,7 @@
     "scripts": {
         "start": "node src/index.js",
         "analyze": "node_modules/.bin/eslint src --ext .js,.jsx",
-        "npm ": "npx eslint src --fix",
+        "fix": "npx eslint src --fix",
         "test": "jest",
         "test:coverage": "jest --coverage",
         "test:report": "npx sonarqube-scanner",
@@ -19,7 +19,8 @@
     "dependencies": {
         "dotenv": "^16.4.7",
         "express": "^4.21.2",
-        "mongoose": "^8.10.0"
+        "mongoose": "^8.10.0",
+        "morgan": "^1.10.0"
     },
     "devDependencies": {
         "@babel/core": "^7.26.0",
