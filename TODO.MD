@@ -4,7 +4,7 @@ Rutes:
     * register
     * login
     * recoverPass
-* seguridad
+* seguridad(no lo se)
 * roles(not implemented)
 CRUD(implemented)
 * User
