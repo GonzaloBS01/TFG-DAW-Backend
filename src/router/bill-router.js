@@ -1,18 +1,13 @@
 import express from 'express';
-import { Bill } from '../models/bill.js';
+import Bill from '../models/bill.js'; //todo borrar despues de mover a controller
+import { createBill } from '../controllers/bill-controller.js';
 
 const router = express.Router();
 
+
+
 // Crear una factura
-router.post('/', async (req, res) => {
-  try {
-    const bill = new Bill(req.body);
-    await bill.save();
-    res.status(201).json(bill);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-});
+router.post('/', createBill);
 
 // Obtener todas las facturas
 router.get('/', async (req, res) => {

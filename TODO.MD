@@ -12,7 +12,5 @@ CRUD(implemented)
 * Bills
 Swagger ui(imlemented, falta acabar) + Añadir endpoints(implemented)
 
-
-Dudas
-copilot me ha exportado las rutas como route
-donde agregar el js para que se lean los yaml
+**hacer controllers**
+**hacer services**

@@ -3,7 +3,7 @@ import express from 'express';
 const router = express.Router();
 
 router.post('/signin', (req, res) => {
-  res.send('Sign-in route');
+  res.status(405).send('Sign-in route');
 });
 
 router.post('/login', (req, res) => {

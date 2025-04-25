@@ -7,5 +7,5 @@ const billSchema = new mongoose.Schema({
     products: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Product' }],
 }, { timestamps: true });
 
-export const Bill = mongoose.model('Bill', billSchema);
+export default mongoose.model('Bill', billSchema);
 
