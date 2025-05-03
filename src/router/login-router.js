@@ -1,17 +1,12 @@
 import express from 'express';
+import { logIn, recoverPassword, signIn } from '../controllers/login-controller.js';
 
 const router = express.Router();
 
-router.post('/signin', (req, res) => {
-  res.status(405).send('Sign-in route');
-});
+router.post('/signin', signIn);
 
-router.post('/login', (req, res) => {
-  res.send('Login route');
-});
+router.post('/login', logIn);
 
-router.post('/recoverPass', (req, res) => {
-  res.send('Recover password route');
-});
+router.post('/recoverPass', recoverPassword);
 
 export default router;

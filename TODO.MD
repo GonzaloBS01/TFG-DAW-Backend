@@ -1,4 +1,3 @@
-Add logger (utils con configuración en config, se recoge en utils)(Winstong) + Morgan (express loader, configuración en config)(implemented)
 Rutes:
 * login(imlemented, falta acabar)
     * register
@@ -14,3 +13,4 @@ Swagger ui(imlemented, falta acabar) + Añadir endpoints(implemented)
 
 **hacer controllers**
 **hacer services**
+***duda con los controllers y los services***

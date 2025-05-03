@@ -11,7 +11,8 @@ dotenv.config();
 export default function expressLoader(app) {
   app.use(() => {
       console.log('Express loaded');
-  });
+  })
+  ;
 
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
