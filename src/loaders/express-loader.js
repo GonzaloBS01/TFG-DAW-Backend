@@ -1,7 +1,9 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import morganConfig from '../config/morgan-config.js';
 import swaggerUi from 'swagger-ui-express';
+import { HttpStatusError } from 'common-errors';
+
+import morganConfig from '../config/morgan-config.js';
 import swaggerSpec from '../config/swagger-config.js';
 import router from '../router/index.js';
 import { errorMiddleware } from '../middlewares/error-handler.js';
@@ -9,11 +11,6 @@ import { errorMiddleware } from '../middlewares/error-handler.js';
 dotenv.config();
 
 export default function expressLoader(app) {
-  app.use(() => {
-      console.log('Express loaded');
-  })
-  ;
-
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
   app.use(morganConfig);
@@ -23,5 +20,7 @@ export default function expressLoader(app) {
 
   // Rutas
   app.use('/api/v1', router);
-  app.use(errorMiddleware);
+  app.use((req, res) => {
+    errorMiddleware(new HttpStatusError(404, 'Resource not found'), req, res);
+  });
 }
