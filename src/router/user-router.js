@@ -1,5 +1,11 @@
 import express from 'express';
-import { createUser, deleteUser, getAllUsers, getUserById, updateUser } from '../controllers/user-controller.js';
+import {
+  createUser,
+  getAllUsersController,
+  deleteUserController,
+  getUserByIdController,
+  updateUserController,
+} from '../controllers/user-controller.js';
 
 const router = express.Router();
 
@@ -7,15 +13,15 @@ const router = express.Router();
 router.post('/', createUser);
 
 // Obtener todos los usuarios
-router.get('/', getAllUsers);
+router.get('/', getAllUsersController);
 
 // Obtener un usuario por ID
-router.get('/:id', getUserById);
+router.get('/:id', getUserByIdController);
 
 // Actualizar un usuario
-router.put('/:id', updateUser);
+router.put('/:id', updateUserController);
 
 // Eliminar un usuario
-router.delete('/:id', deleteUser);
+router.delete('/:id', deleteUserController);
 
 export default router;

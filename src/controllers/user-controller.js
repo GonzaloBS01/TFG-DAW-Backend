@@ -1,4 +1,4 @@
-import { saveUser, getAllUsers, getUserById, updateUser, deleteUser } from '../services/mongodb/user-service';
+import { saveUser, getAllUsers, getUserById, updateUser, deleteUser } from '../services/mongodb/user-service.js';
 export async function createUser(req, res, next) {
   try {
     const savedUser = await saveUser(req.body);
