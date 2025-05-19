@@ -1,9 +1,4 @@
-Rutes:
-* login(imlemented, falta acabar)
-    * register
-    * login
-    * recoverPass
-* seguridad(not implemented)
-* roles(not implemented)
+* seguridad(implemented)
+* roles(implemented, user.js)
 
-Swagger ui(imlemented, falta acabar) + Añadir endpoints(implemented)
+Swagger ui(imlemented)

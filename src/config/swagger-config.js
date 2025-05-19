@@ -33,10 +33,28 @@ const swaggerOptions = {
             },
           },
         },
+        UserInput: {
+          type: 'object',
+          required: ['name', 'email', 'password'],
+          properties: {
+            name: {
+              type: 'string',
+              description: 'Nombre del usuario',
+            },
+            email: {
+              type: 'string',
+              description: 'Correo electrónico del usuario',
+            },
+            password: {
+              type: 'string',
+              description: 'Contraseña del usuario',
+            },
+          },
+        },
       },
     },
   },
-  apis: ['./src/routes/*.js'],
+  apis: ['./src/router/*.js'],
 };
 
 const swaggerSpec = swaggerJsdoc(swaggerOptions);

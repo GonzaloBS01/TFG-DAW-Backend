@@ -1,50 +1,43 @@
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
+import { registerUser, loginUser, recoverPassword as recoverPasswordService } from '../services/login/login-service.js';
 
-// Mock database (replace with your database logic)
-const users = [];
-
-// Sign Up
-export async function signIn(req, res) {
-  const { username, password } = req.body;
-
-  if (!username || !password) {
-    return res.status(400).json({ message: 'Username and password are required.' });
+// Registro
+export async function signIn(req, res, next) {
+  try {
+    const { username, name, email, password, role } = req.body;
+    if (!username || !name || !email || !password) {
+      return res.status(400).json({ message: 'Faltan campos obligatorios.' });
+    }
+    const user = await registerUser({ username, name, email, password, role });
+    res.status(201).json({ message: 'Usuario registrado correctamente.', user });
+  } catch (error) {
+    next(error);
   }
+}
 
-  const hashedPassword = await bcrypt.hash(password, 10);
-  users.push({ username, password: hashedPassword });
-
-  res.status(201).json({ message: 'User registered successfully.' });
-};
-
-// Log In
-export async function logIn(req, res) {
-  const { username, password } = req.body;
-
-  const user = users.find(u => u.username === username);
-  if (!user) {
-    return res.status(404).json({ message: 'User not found.' });
+// Login
+export async function logIn(req, res, next) {
+  try {
+    const { username, password } = req.body;
+    if (!username || !password) {
+      return res.status(400).json({ message: 'Usuario y contraseña requeridos.' });
+    }
+    const result = await loginUser({ username, password });
+    res.status(200).json({ message: 'Login exitoso.', ...result });
+  } catch (error) {
+    next(error);
   }
+}
 
-  const isPasswordValid = await bcrypt.compare(password, user.password);
-  if (!isPasswordValid) {
-    return res.status(401).json({ message: 'Invalid credentials.' });
+// Recuperar contraseña
+export async function recoverPassword(req, res, next) {
+  try {
+    const { email } = req.body;
+    if (!email) {
+      return res.status(400).json({ message: 'Email requerido.' });
+    }
+    const result = await recoverPasswordService({ email });
+    res.status(200).json(result);
+  } catch (error) {
+    next(error);
   }
-
-  const token = jwt.sign({ username: user.username }, 'your_secret_key', { expiresIn: '1h' });
-  res.status(200).json({ message: 'Login successful.', token });
-};
-
-// Recover Password
-export async function recoverPassword(req, res) {
-  const { username } = req.body;
-
-  const user = users.find(u => u.username === username);
-  if (!user) {
-    return res.status(404).json({ message: 'User not found.' });
-  }
-
-  // Mock password recovery logic (replace with actual implementation)
-  res.status(200).json({ message: 'Password recovery instructions sent to your email.' });
-};
+}
