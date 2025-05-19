@@ -29,6 +29,27 @@ export async function getUserById(id) {
     throw new Error(`Error al obtener el usuario: ${error.message}`);
   }
 }
+export async function getUsernameByCredentials({ username }) {
+  try {
+    const user = await User.findOne({ username });
+    if (!user) {
+      throw new Error('Usuario no encontrado');
+    }
+    return user;
+  }
+  catch (error) {
+    throw new Error(`Error al obtener el usuario: ${error.message}`);
+  }
+}
+
+export async function getUserByEmail(email) {
+  const user = await User.findOne({ email });
+  if (!user) {
+    throw new Error('Usuario no encontrado');
+  }
+  return user;
+}
+
 export async function updateUser(id, user) {
   try {
     const updatedUser = await User.findByIdAndUpdate(id, user, { new: true });
