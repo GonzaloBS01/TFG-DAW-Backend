@@ -14,7 +14,20 @@ const swaggerOptions = {
         description: 'Servidor local',
       },
     ],
+    security: [
+      {
+        bearerAuth: [],
+      },
+    ],
     components: {
+      securitySchemes:
+      {
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+        },
+      },
       schemas: {
         User: {
           type: 'object',

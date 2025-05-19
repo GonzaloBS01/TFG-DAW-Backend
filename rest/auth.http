@@ -1,0 +1,17 @@
+curl -X POST http://localhost:3000/api/v1/auth/login \
+-H "Content-Type: application/json" \
+-d '{
+  "username": "Alshain",
+  "password": "Gabri123"
+}'
+
+### Sign in
+
+curl -X POST http://localhost:3000/api/v1/auth/signin \
+-H "Content-Type: application/json" \
+-d '{
+  "username": "Alshain",
+  "name": "Gabri",
+  "email": "gabri@test.com",
+  "password": "Gabri123"
+}'
