@@ -4,51 +4,45 @@ info:
   version: 1.0.0
   description: API para crear, obtener, actualizar y eliminar usuarios.
 servers:
-  - url: http://localhost:3000/users
+  - url: http://localhost:3000/api/v1/users
 
 paths:
-  /:
-    post:
-      summary: Crear un nuevo usuario
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UserInput'
-      responses:
-        '201':
-          description: Usuario creado exitosamente
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-        '400':
-          description: Error de validación
-
+  /users:
     get:
+      tags: [Usuarios]
       summary: Obtener todos los usuarios
       responses:
         '200':
-          description: Lista de usuarios
+          description: Lista de usuarios obtenida correctamente
           content:
             application/json:
               schema:
                 type: array
                 items:
                   $ref: '#/components/schemas/User'
-        '500':
-          description: Error interno del servidor
+    post:
+      tags: [Usuarios]
+      summary: Crear un nuevo usuario
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewUser'
+      responses:
+        '201':
+          description: Usuario creado correctamente
 
-  /{id}:
+  /users/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
     get:
-      summary: Obtener un usuario por ID
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: string
+      tags: [Usuarios]
+      summary: Obtener usuario por ID
       responses:
         '200':
           description: Usuario encontrado
@@ -56,52 +50,24 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
-        '404':
-          description: Usuario no encontrado
-        '500':
-          description: Error interno del servidor
-
     put:
-      summary: Actualizar un usuario
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: string
+      tags: [Usuarios]
+      summary: Actualizar usuario
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UserInput'
+              $ref: '#/components/schemas/UserUpdate'
       responses:
         '200':
-          description: Usuario actualizado
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-        '400':
-          description: Error de validación
-        '404':
-          description: Usuario no encontrado
-
+          description: Usuario actualizado correctamente
     delete:
-      summary: Eliminar un usuario
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: string
+      tags: [Usuarios]
+      summary: Eliminar usuario
       responses:
         '200':
-          description: Usuario eliminado
-        '404':
-          description: Usuario no encontrado
-        '500':
-          description: Error interno del servidor
+          description: Usuario eliminado correctamente
 
 components:
   schemas:
@@ -110,23 +76,41 @@ components:
       properties:
         _id:
           type: string
+        username:
+          type: string
         name:
           type: string
         email:
           type: string
-        createdAt:
+        role:
           type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
-    UserInput:
+          enum: [user, admin]
+    NewUser:
       type: object
       required:
+        - username
         - name
         - email
+        - password
+      properties:
+        username:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        role:
+          type: string
+          enum: [user, admin]
+          default: user
+    UserUpdate:
+      type: object
       properties:
         name:
           type: string
         email:
+          type: string
+        password:
           type: string

@@ -74,3 +74,20 @@ export async function deleteUser(id) {
     throw new Error(`Error al eliminar el usuario: ${error.message}`);
   }
 }
+export async function updateUserPassword(id, hashedPassword) {
+  try {
+    const updatedUser = await User.findByIdAndUpdate(
+      id,
+      { password: hashedPassword },
+      { new: true },
+    );
+
+    if (!updatedUser) {
+      throw new Error('Usuario no encontrado');
+    }
+
+    return updatedUser;
+  } catch (error) {
+    throw new Error(`Error al actualizar la contraseña: ${error.message}`);
+  }
+}

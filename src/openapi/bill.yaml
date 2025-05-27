@@ -4,11 +4,12 @@ info:
   version: 1.0.0
   description: API para crear, obtener, actualizar y eliminar facturas.
 servers:
-  - url: http://localhost:3000/bills
+  - url: http://localhost:3000/api/v1/bills
 
 paths:
   /:
     post:
+      tags: [Facturas]
       summary: Crear una nueva factura
       requestBody:
         required: true
@@ -27,6 +28,7 @@ paths:
           description: Error de validación
 
     get:
+      tags: [Facturas]
       summary: Obtener todas las facturas
       responses:
         '200':
@@ -42,6 +44,7 @@ paths:
 
   /{id}:
     get:
+      tags: [Facturas]
       summary: Obtener una factura por ID
       parameters:
         - in: path
@@ -62,6 +65,7 @@ paths:
           description: Error interno del servidor
 
     put:
+      tags: [Facturas]
       summary: Actualizar una factura
       parameters:
         - in: path
@@ -88,6 +92,7 @@ paths:
           description: Factura no encontrada
 
     delete:
+      tags: [Facturas]
       summary: Eliminar una factura
       parameters:
         - in: path

@@ -7,6 +7,11 @@ const config = {
   database: {
     url: process.env.MONGO_URL || 'mongodb://localhost:27017/mi_base_de_datos',
   },
+  email: {
+    email: process.env.EMAIL_USER,
+    password: process.env.EMAIL_PASSWORD,
+  },
+  frontendUrl: process.env.FRONTEND_URL || 'http://localhost:3000',
 };
 
 export default config;

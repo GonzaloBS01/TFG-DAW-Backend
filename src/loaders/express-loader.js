@@ -4,7 +4,7 @@ import swaggerUi from 'swagger-ui-express';
 import { HttpStatusError } from 'common-errors';
 
 import morganConfig from '../config/morgan-config.js';
-import swaggerSpec from '../config/swagger-config.js';
+import swaggerSpec from '../openapi/index.js';
 import router from '../router/index.js';
 import { errorMiddleware } from '../middlewares/error-handler.js';
 
