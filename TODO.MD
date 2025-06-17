@@ -2,10 +2,9 @@
 
 - **Definir el ciclo de vida de una compra**
   - Postman
-  - Carrito ? (añadir, eliminar, ver)
+  <!-- - Carrito ? (añadir, eliminar, ver)
     - Persistencia (localStorage, sesión, bbdd)
-      - Si se elige BBDD -> crear esquema/modelo de carrito en BBDD
-      <!-- A medias -->
+      - Si se elige BBDD -> crear esquema/modelo de carrito en BBDD -->
   - Proceso de pago (validar, procesar, confirmar)
     - Generar documentos para guardar en BBDD
   - Generar facturas (guardar en BBDD)
@@ -15,9 +14,9 @@
   - Habilitar GMAIL
   - Configurar plantillas de correo (funcion en service) -->
 
-## Older
-
+<!-- ## Older -->
+<!--
 * seguridad(implemented)
 * roles(implemented, user.js)
 
-Swagger ui(imlemented)
+Swagger ui(imlemented) -->

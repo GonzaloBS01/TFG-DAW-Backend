@@ -1,0 +1,91 @@
+paths:
+  /cart:
+    get:
+      tags: [Carrito]
+      summary: Obtener carrito del usuario
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Carrito obtenido correctamente
+    delete:
+      tags: [Carrito]
+      summary: Vaciar carrito
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Carrito vaciado correctamente
+
+  /cart/items:
+    post:
+      tags: [Carrito]
+      summary: Añadir producto al carrito
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                productId:
+                  type: string
+                quantity:
+                  type: integer
+                  default: 1
+      responses:
+        '200':
+          description: Producto añadido al carrito
+
+  /cart/items/{productId}:
+    put:
+      tags: [Carrito]
+      summary: Actualizar cantidad de producto
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                quantity:
+                  type: integer
+      responses:
+        '200':
+          description: Cantidad actualizada
+    delete:
+      tags: [Carrito]
+      summary: Eliminar producto del carrito
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Producto eliminado del carrito
+
+  /checkout:
+    post:
+      tags: [Checkout]
+      summary: Procesar compra
+      security:
+        - bearerAuth: []
+      responses:
+        '201':
+          description: Compra procesada exitosamente
+        '400':
+          description: Carrito vacío

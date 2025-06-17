@@ -79,6 +79,22 @@ export async function sendRegistrationEmail(user) {
 }
 
 /**
+ * Envía un correo de confirmación de compra
+ * @param {Object} user - Usuario que realizó la compra
+ * @param {Object} bill - Detalles de la factura
+ */
+export async function sendPurchaseConfirmationEmail(user, bill) {
+  const mailOptions = {
+    from: process.env.EMAIL_USER,
+    to: user.email,
+    subject: 'Confirmación de compra',
+    html: getPurchaseConfirmationTemplate(user.name, bill),
+  };
+
+  return sendEmail(mailOptions);
+}
+
+/**
  * Plantilla HTML para correo de recuperación de contraseña
  */
 function getPasswordRecoveryTemplate(name, resetUrl) {
@@ -110,9 +126,28 @@ function getRegistrationTemplate(name) {
   `;
 }
 
+/**
+ * Plantilla HTML para correo de confirmación de compra
+ */
+function getPurchaseConfirmationTemplate(userName, bill) {
+  return `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+      <h2>¡Compra confirmada!</h2>
+      <p>Hola ${userName},</p>
+      <p>Tu compra se ha procesado exitosamente.</p>
+      <p><strong>Número de orden:</strong> ${bill._id}</p>
+      <p><strong>Total:</strong> €${bill.totalAmount}</p>
+      <p><strong>Fecha:</strong> ${new Date(bill.createdAt).toLocaleDateString()}</p>
+      <p>Gracias por tu compra.</p>
+      <p>Saludos,<br>El equipo de ventas</p>
+    </div>
+  `;
+}
+
 export default {
   initMailer,
   sendEmail,
   sendPasswordRecoveryEmail,
   sendRegistrationEmail,
+  sendPurchaseConfirmationEmail,
 };
