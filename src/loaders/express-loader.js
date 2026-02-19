@@ -2,7 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import swaggerUi from 'swagger-ui-express';
 import { HttpStatusError } from 'common-errors';
-
+import cors from 'cors';
 import morganConfig from '../config/morgan-config.js';
 import swaggerSpec from '../openapi/index.js';
 import router from '../router/index.js';
@@ -11,6 +11,9 @@ import { errorMiddleware } from '../middlewares/error-handler.js';
 dotenv.config();
 
 export default function expressLoader(app) {
+  app.use(cors({
+    origin: process.env.CORS_ORIGIN || 'localhost:4200',
+  }));
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
   app.use(morganConfig);

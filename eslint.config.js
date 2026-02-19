@@ -12,6 +12,9 @@ export default [
       ecmaVersion: 2023,
       sourceType: 'module',
       parser: babelParser,
+      parserOptions: {
+        requireConfigFile: false,
+      },
       globals: {
         ...globals.node,
         ...globals.jest,

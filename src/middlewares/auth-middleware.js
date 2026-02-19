@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 
-const SECRET_KEY = process.env.SECRET_KEY;
+const SECRET_KEY = process.env.SECRET_KEY || 'default_secret';
 
 // Middleware para verificar si el usuario está autenticado
 export function authenticateToken(req, res, next) {

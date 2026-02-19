@@ -2,7 +2,7 @@ import nodemailer from 'nodemailer';
 import logger from '../../utils/logger.js';
 
 // Configuración del transporter
-let transporter;
+let transporter = null;
 
 /**
  * Inicializa el transporter de nodemailer
@@ -22,8 +22,16 @@ export function initMailer(config) {
     return transporter;
   } catch (error) {
     logger.error(`❌ Error al configurar el servicio de email: ${error.message}`);
+    transporter = null;
     throw error;
   }
+}
+
+/**
+ * Verifica si el servicio de email está disponible
+ */
+function isEmailServiceAvailable() {
+  return transporter !== null;
 }
 
 /**
@@ -31,8 +39,9 @@ export function initMailer(config) {
  * @param {Object} mailOptions - Opciones del correo
  */
 export async function sendEmail(mailOptions) {
-  if (!transporter) {
-    throw new Error('El servicio de email no ha sido inicializado');
+  if (!isEmailServiceAvailable()) {
+    logger.warn('⚠️ Servicio de email no configurado. Email no enviado.');
+    return null;
   }
 
   try {
@@ -51,6 +60,11 @@ export async function sendEmail(mailOptions) {
  * @param {string} token - Token temporal para recuperar la contraseña
  */
 export async function sendPasswordRecoveryEmail(user, token) {
+  if (!isEmailServiceAvailable()) {
+    logger.warn('⚠️ Servicio de email no configurado. Email de recuperación no enviado.');
+    return null;
+  }
+
   const resetUrl = `${process.env.FRONTEND_URL}/reset-password?token=${token}`;
 
   const mailOptions = {
@@ -68,6 +82,11 @@ export async function sendPasswordRecoveryEmail(user, token) {
  * @param {Object} user - Usuario registrado
  */
 export async function sendRegistrationEmail(user) {
+  if (!isEmailServiceAvailable()) {
+    logger.warn('⚠️ Servicio de email no configurado. Email de registro no enviado.');
+    return null;
+  }
+
   const mailOptions = {
     from: process.env.EMAIL_USER,
     to: user.email,
@@ -84,6 +103,11 @@ export async function sendRegistrationEmail(user) {
  * @param {Object} bill - Detalles de la factura
  */
 export async function sendPurchaseConfirmationEmail(user, bill) {
+  if (!isEmailServiceAvailable()) {
+    logger.warn('⚠️ Servicio de email no configurado. Email de confirmación no enviado.');
+    return null;
+  }
+
   const mailOptions = {
     from: process.env.EMAIL_USER,
     to: user.email,
@@ -150,4 +174,5 @@ export default {
   sendPasswordRecoveryEmail,
   sendRegistrationEmail,
   sendPurchaseConfirmationEmail,
+  isEmailServiceAvailable,
 };
