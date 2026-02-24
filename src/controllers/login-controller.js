@@ -42,7 +42,7 @@ export async function logIn(req, res, next) {
     const token = jwt.sign(
       { id: user._id, username: user.username, isAdmin: user.role === 'admin' },
       SECRET_KEY,
-      { expiresIn: '1h' },
+      { expiresIn: '4h' },
     );
 
     return res.status(200).json({ token, user: { id: user._id, username: user.username, isAdmin: user.role === 'admin' } });
