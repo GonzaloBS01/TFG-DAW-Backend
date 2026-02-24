@@ -6,6 +6,8 @@ import billRouter from '../router/bill-router.js';
 import loginRouter from '../router/login-router.js';
 import cartRouter from '../router/cart-router.js';
 import checkoutRouter from '../router/checkout-router.js';
+import customRequestRouter from '../router/custom-request-router.js';
+import newsletterRouter from '../router/newsletter-router.js';
 
 const router = Router();
 
@@ -15,5 +17,7 @@ router.use('/bills', billRouter);
 router.use('/auth', loginRouter);
 router.use('/cart', cartRouter);
 router.use('/checkout', checkoutRouter);
+router.use('/custom-requests', customRequestRouter);
+router.use('/newsletter', newsletterRouter);
 
 export default router;

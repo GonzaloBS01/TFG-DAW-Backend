@@ -168,11 +168,105 @@ function getPurchaseConfirmationTemplate(userName, bill) {
   `;
 }
 
+/**
+ * Envía un correo de notificación a la tienda cuando un cliente solicita una pieza personalizada
+ * @param {Object} requestData - Datos de la solicitud personalizada
+ */
+export async function sendCustomRequestNotification(requestData) {
+  if (!isEmailServiceAvailable()) {
+    logger.warn('⚠️ Servicio de email no configurado. Notificación de solicitud no enviada.');
+    return null;
+  }
+
+  const mailOptions = {
+    from: process.env.EMAIL_USER,
+    to: process.env.EMAIL_USER, // Se envía a la propia tienda
+    subject: `🔔 Nueva solicitud de pieza personalizada — ${requestData.jewelryType}`,
+    html: getCustomRequestTemplate(requestData),
+  };
+
+  return sendEmail(mailOptions);
+}
+
+/**
+ * Plantilla HTML para notificación de solicitud personalizada
+ */
+function getCustomRequestTemplate(data) {
+  const statusColors = {
+    anillo: '#EF8903',
+    colgante: '#005660',
+    pendientes: '#8B5CF6',
+    pulsera: '#EC4899',
+    broche: '#10B981',
+    otro: '#6B7280',
+  };
+  const color = statusColors[data.jewelryType] || '#EF8903';
+
+  return `
+    <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #0A0A0A; color: #FAFAF8; border-radius: 12px; overflow: hidden;">
+      <!-- Header -->
+      <div style="background: linear-gradient(135deg, #0A0A0A 0%, #1a1a1a 100%); padding: 30px; text-align: center; border-bottom: 3px solid ${color};">
+        <h1 style="margin: 0; color: #EF8903; font-size: 24px;">Kátodo Ciberjoyería</h1>
+        <p style="margin: 5px 0 0; color: #9CA3AF; font-size: 14px;">Nueva solicitud de pieza personalizada</p>
+      </div>
+
+      <!-- Body -->
+      <div style="padding: 30px;">
+        <div style="background-color: #1a1a1a; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
+          <h2 style="margin: 0 0 15px; color: ${color}; font-size: 18px;">
+            📋 Detalles de la solicitud
+          </h2>
+
+          <table style="width: 100%; border-collapse: collapse;">
+            <tr>
+              <td style="padding: 8px 0; color: #9CA3AF; width: 140px;">Nombre:</td>
+              <td style="padding: 8px 0; color: #FAFAF8; font-weight: bold;">${data.name}</td>
+            </tr>
+            <tr>
+              <td style="padding: 8px 0; color: #9CA3AF;">Email:</td>
+              <td style="padding: 8px 0; color: #FAFAF8;">${data.email}</td>
+            </tr>
+            ${data.phone ? `<tr>
+              <td style="padding: 8px 0; color: #9CA3AF;">Teléfono:</td>
+              <td style="padding: 8px 0; color: #FAFAF8;">${data.phone}</td>
+            </tr>` : ''}
+            <tr>
+              <td style="padding: 8px 0; color: #9CA3AF;">Tipo de joya:</td>
+              <td style="padding: 8px 0; color: ${color}; font-weight: bold; text-transform: capitalize;">${data.jewelryType}</td>
+            </tr>
+            ${data.materials ? `<tr>
+              <td style="padding: 8px 0; color: #9CA3AF;">Materiales:</td>
+              <td style="padding: 8px 0; color: #FAFAF8;">${data.materials}</td>
+            </tr>` : ''}
+            ${data.budget ? `<tr>
+              <td style="padding: 8px 0; color: #9CA3AF;">Presupuesto:</td>
+              <td style="padding: 8px 0; color: #FAFAF8;">${data.budget}</td>
+            </tr>` : ''}
+          </table>
+        </div>
+
+        <!-- Description -->
+        <div style="background-color: #1a1a1a; border-radius: 8px; padding: 20px; border-left: 4px solid ${color};">
+          <h3 style="margin: 0 0 10px; color: #FAFAF8; font-size: 16px;">💬 Descripción</h3>
+          <p style="margin: 0; color: #D1D5DB; line-height: 1.6;">${data.description}</p>
+        </div>
+
+        <!-- Footer info -->
+        <p style="color: #6B7280; font-size: 12px; margin-top: 20px; text-align: center;">
+          Solicitud recibida el ${new Date().toLocaleString('es-ES')}
+        </p>
+      </div>
+    </div>
+  `;
+}
+
 export default {
   initMailer,
   sendEmail,
   sendPasswordRecoveryEmail,
   sendRegistrationEmail,
   sendPurchaseConfirmationEmail,
+  sendCustomRequestNotification,
   isEmailServiceAvailable,
 };
+
