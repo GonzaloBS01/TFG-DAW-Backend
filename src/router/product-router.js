@@ -5,7 +5,7 @@ import { authenticateToken, requireAdmin } from '../middlewares/auth-middleware.
 const router = express.Router();
 
 router.post('/', authenticateToken, requireAdmin, createProduct);
-router.get('/', authenticateToken, getAllProductsController);
+router.get('/', getAllProductsController);
 router.put('/:id', authenticateToken, requireAdmin, updateProductController);
 router.delete('/:id', authenticateToken, requireAdmin, deleteProductController);
 

@@ -4,7 +4,7 @@ import { authenticateToken, requireAdmin } from '../middlewares/auth-middleware.
 
 const router = express.Router();
 
-// Cualquier usuario autenticado puede enviar una solicitud
+// Solo usuarios autenticados pueden enviar una solicitud
 router.post('/', authenticateToken, createCustomRequest);
 
 // Solo admin puede ver todas las solicitudes

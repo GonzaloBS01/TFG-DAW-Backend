@@ -1,7 +1,13 @@
+import bcrypt from 'bcrypt';
 import { saveUser, getAllUsers, getUserById, updateUser, deleteUser } from '../services/mongodb/user-service.js';
+
 export async function createUser(req, res, next) {
   try {
-    const savedUser = await saveUser(req.body);
+    const userData = req.body;
+    if (userData.password) {
+      userData.password = await bcrypt.hash(userData.password, 10);
+    }
+    const savedUser = await saveUser(userData);
     res.status(201).json(savedUser);
   } catch (error) {
     error.status = 400;
@@ -9,6 +15,7 @@ export async function createUser(req, res, next) {
     next(error);
   }
 }
+
 export async function getAllUsersController(req, res, next) {
   try {
     const allUsers = await getAllUsers();
@@ -34,7 +41,13 @@ export async function getUserByIdController(req, res, next) {
 }
 export async function updateUserController(req, res, next) {
   try {
-    const user = await updateUser(req.params.id, req.body);
+    const updateData = { ...req.body };
+    // Si viene password, hay que hashearla
+    if (updateData.password) {
+      updateData.password = await bcrypt.hash(updateData.password, 10);
+    }
+
+    const user = await updateUser(req.params.id, updateData);
     if (!user) {
       return res.status(404).json({ error: 'Usuario no encontrado' });
     }
