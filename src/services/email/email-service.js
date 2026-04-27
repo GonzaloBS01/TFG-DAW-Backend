@@ -119,6 +119,35 @@ export async function sendPurchaseConfirmationEmail(user, bill) {
 }
 
 /**
+ * Envía un correo de confirmación de compra con factura PDF adjunta
+ * @param {Object} user - Usuario que realizó la compra
+ * @param {Object} bill - Detalles de la factura
+ * @param {Buffer} pdfBuffer - Buffer del PDF de la factura
+ */
+export async function sendPurchaseConfirmationEmailWithPDF(user, bill, pdfBuffer) {
+  if (!isEmailServiceAvailable()) {
+    logger.warn('⚠️ Servicio de email no configurado. Email de confirmación no enviado.');
+    return null;
+  }
+
+  const mailOptions = {
+    from: process.env.EMAIL_USER,
+    to: user.email,
+    subject: 'Confirmación de compra - Factura adjunta',
+    html: getPurchaseConfirmationTemplate(user.name, bill),
+    attachments: [
+      {
+        filename: `factura-${bill._id}.pdf`,
+        content: pdfBuffer,
+        contentType: 'application/pdf',
+      },
+    ],
+  };
+
+  return sendEmail(mailOptions);
+}
+
+/**
  * Plantilla HTML para correo de recuperación de contraseña
  */
 function getPasswordRecoveryTemplate(name, resetUrl) {
@@ -266,6 +295,7 @@ export default {
   sendPasswordRecoveryEmail,
   sendRegistrationEmail,
   sendPurchaseConfirmationEmail,
+  sendPurchaseConfirmationEmailWithPDF,
   sendCustomRequestNotification,
   isEmailServiceAvailable,
 };

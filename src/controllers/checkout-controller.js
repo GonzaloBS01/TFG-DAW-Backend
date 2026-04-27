@@ -1,7 +1,8 @@
 import { getCartByUserId, processCartToOrder } from '../services/mongodb/cart-service.js';
-import { saveBill } from '../services/mongodb/bill-service.js';
+import { saveBill, getBillById } from '../services/mongodb/bill-service.js';
 import emailService from '../services/email/email-service.js';
 import { getUserById } from '../services/mongodb/user-service.js';
+import { generateBillPDF } from '../services/pdf/pdf-service.js';
 import Product from '../models/products.js';
 
 export async function processCheckout(req, res, next) {
@@ -42,15 +43,33 @@ export async function processCheckout(req, res, next) {
     // 5. Marcar carrito como procesado
     await processCartToOrder(userId);
 
-    // 6. Enviar correo de confirmación
+    // 6. Obtener factura poblada y usuario para generar PDF
+    const billPopulated = await getBillById(bill._id);
     const user = await getUserById(userId);
-    await emailService.sendPurchaseConfirmationEmail(user, bill);
+
+    // 7. Generar PDF de la factura
+    let pdfBuffer = null;
+    try {
+      pdfBuffer = await generateBillPDF(billPopulated, user);
+    } catch (pdfError) {
+      // Log del error pero continuar el flujo - el checkout no falla si el PDF falla
+      console.error(`Error al generar PDF: ${pdfError.message}`);
+    }
+
+    // 8. Enviar correo de confirmación con PDF adjunto
+    if (pdfBuffer) {
+      await emailService.sendPurchaseConfirmationEmailWithPDF(user, billPopulated, pdfBuffer);
+    } else {
+      // Fallback a email sin PDF si ocurrió error
+      await emailService.sendPurchaseConfirmationEmail(user, billPopulated);
+    }
 
     res.status(201).json({
       message: 'Compra procesada exitosamente',
       orderId: bill._id,
       bill: bill,
       total: bill.totalAmount,
+      downloadUrl: `/api/v1/bills/${bill._id}/download`,
     });
 
   } catch (error) {
