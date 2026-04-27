@@ -12,6 +12,7 @@ const customRequestSchema = new mongoose.Schema({
     materials: { type: String },
     description: { type: String, required: true },
     budget: { type: String },
+    image: { type: String },
     status: {
         type: String,
         enum: ['pending', 'contacted', 'completed', 'rejected'],

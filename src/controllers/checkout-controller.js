@@ -2,6 +2,7 @@ import { getCartByUserId, processCartToOrder } from '../services/mongodb/cart-se
 import { saveBill } from '../services/mongodb/bill-service.js';
 import emailService from '../services/email/email-service.js';
 import { getUserById } from '../services/mongodb/user-service.js';
+import Product from '../models/products.js';
 
 export async function processCheckout(req, res, next) {
   try {
@@ -23,7 +24,7 @@ export async function processCheckout(req, res, next) {
         price: item.price,
       })),
       totalAmount: cart.total,
-      status: 'paid', // O el estado que manejes
+      status: 'paid',
       paymentMethod: req.body.paymentMethod || 'card',
       billingAddress: req.body.billingAddress,
     };
@@ -31,10 +32,17 @@ export async function processCheckout(req, res, next) {
     // 3. Guardar la factura
     const bill = await saveBill(billData);
 
-    // 4. Marcar carrito como procesado
+    // 4. Marcar los productos comprados como "vendidos"
+    const productIds = cart.items.map(item => item.product._id);
+    await Product.updateMany(
+      { _id: { $in: productIds } },
+      { $set: { status: 'sold' } },
+    );
+
+    // 5. Marcar carrito como procesado
     await processCartToOrder(userId);
 
-    // 5. Enviar correo de confirmación (opcional)
+    // 6. Enviar correo de confirmación
     const user = await getUserById(userId);
     await emailService.sendPurchaseConfirmationEmail(user, bill);
 

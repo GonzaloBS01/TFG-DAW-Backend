@@ -13,6 +13,7 @@ const productSchema = new mongoose.Schema({
         default: 'available',
     },
     image: { type: String }, // URL
+    images: [{ type: String }], // Array for carousel
 }, { timestamps: true });
 
 export default mongoose.model('Product', productSchema);
