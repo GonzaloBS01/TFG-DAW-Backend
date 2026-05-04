@@ -1,0 +1,141 @@
+paths:
+  /newsletter/subscribe:
+    post:
+      tags: [Newsletter]
+      summary: Suscribir un email a la newsletter
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+              properties:
+                email:
+                  type: string
+                  format: email
+      responses:
+        '201':
+          description: Email suscrito correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+        '200':
+          description: El email ya estaba suscrito
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+        '400':
+          description: Email obligatorio o formato invalido
+
+  /newsletter/subscribers:
+    get:
+      tags: [Newsletter]
+      summary: Obtener todos los suscriptores
+      description: Endpoint reservado a usuarios administradores.
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Listado de suscriptores
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/NewsletterSubscriber'
+        '401':
+          description: Token no proporcionado
+        '403':
+          description: Acceso solo para administradores
+
+  /newsletter/subscribers/{id}:
+    delete:
+      tags: [Newsletter]
+      summary: Dar de baja a un suscriptor
+      description: Endpoint reservado a usuarios administradores.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Suscriptor dado de baja correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+        '404':
+          description: Suscriptor no encontrado
+        '401':
+          description: Token no proporcionado
+        '403':
+          description: Acceso solo para administradores
+
+  /newsletter/send:
+    post:
+      tags: [Newsletter]
+      summary: Enviar newsletter a todos los suscriptores
+      description: Endpoint reservado a usuarios administradores.
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - subject
+                - message
+              properties:
+                subject:
+                  type: string
+                message:
+                  type: string
+      responses:
+        '200':
+          description: Newsletter enviada correctamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  totalSent:
+                    type: integer
+        '400':
+          description: Faltan datos obligatorios o no hay suscriptores
+        '401':
+          description: Token no proporcionado
+        '403':
+          description: Acceso solo para administradores
+components:
+  schemas:
+    NewsletterSubscriber:
+      type: object
+      properties:
+        _id:
+          type: string
+        email:
+          type: string
+          format: email
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    MessageResponse:
+      type: object
+      properties:
+        message:
+          type: string

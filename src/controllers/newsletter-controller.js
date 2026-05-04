@@ -1,4 +1,4 @@
-import { subscribeEmail, isAlreadySubscribed, getAllSubscribers } from '../services/mongodb/newsletter-service.js';
+import { subscribeEmail, isAlreadySubscribed, getAllSubscribers, unsubscribeEmail } from '../services/mongodb/newsletter-service.js';
 import { sendEmail } from '../services/email/email-service.js';
 
 export async function subscribe(req, res, next) {
@@ -37,6 +37,23 @@ export async function getAllSubscribersController(req, res, next) {
     } catch (error) {
         error.status = 500;
         error.message = 'Error al obtener los suscriptores';
+        next(error);
+    }
+}
+
+export async function unsubscribe(req, res, next) {
+    try {
+        const { id } = req.params;
+        const deletedSubscriber = await unsubscribeEmail(id);
+
+        if (!deletedSubscriber) {
+            return res.status(404).json({ message: 'Suscriptor no encontrado' });
+        }
+
+        res.status(200).json({ message: 'Usuario dado de baja correctamente' });
+    } catch (error) {
+        error.status = 500;
+        error.message = 'Error al dar de baja al suscriptor';
         next(error);
     }
 }

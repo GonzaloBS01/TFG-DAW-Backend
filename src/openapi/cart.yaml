@@ -20,7 +20,7 @@ paths:
   /cart/items:
     post:
       tags: [Carrito]
-      summary: Añadir producto al carrito
+      summary: Anadir producto al carrito
       security:
         - bearerAuth: []
       requestBody:
@@ -29,6 +29,8 @@ paths:
           application/json:
             schema:
               type: object
+              required:
+                - productId
               properties:
                 productId:
                   type: string
@@ -37,7 +39,7 @@ paths:
                   default: 1
       responses:
         '200':
-          description: Producto añadido al carrito
+          description: Producto anadido al carrito
 
   /cart/items/{productId}:
     put:
@@ -57,6 +59,8 @@ paths:
           application/json:
             schema:
               type: object
+              required:
+                - quantity
               properties:
                 quantity:
                   type: integer
@@ -77,15 +81,3 @@ paths:
       responses:
         '200':
           description: Producto eliminado del carrito
-
-  /checkout:
-    post:
-      tags: [Checkout]
-      summary: Procesar compra
-      security:
-        - bearerAuth: []
-      responses:
-        '201':
-          description: Compra procesada exitosamente
-        '400':
-          description: Carrito vacío

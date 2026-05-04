@@ -1,15 +1,7 @@
-openapi: 3.0.0
-info:
-  title: API de Autenticación
-  version: 1.0.0
-  description: API para autenticación y gestión de usuarios.
-servers:
-  - url: http://localhost:3000/api/v1/auth
-    description: Servidor de autenticación
 paths:
-  /signin:
+  /auth/signin:
     post:
-      tags: [Autenticación]
+      tags: [Autenticacion]
       summary: Registrar un nuevo usuario
       requestBody:
         required: true
@@ -25,18 +17,14 @@ paths:
               properties:
                 username:
                   type: string
-                  description: Nombre de usuario único
                 name:
                   type: string
-                  description: Nombre completo del usuario
                 email:
                   type: string
                   format: email
-                  description: Correo electrónico del usuario
                 password:
                   type: string
                   format: password
-                  description: Contraseña del usuario
       responses:
         '201':
           description: Usuario registrado correctamente
@@ -48,23 +36,14 @@ paths:
                   message:
                     type: string
                   user:
-                    type: object
-                    properties:
-                      _id:
-                        type: string
-                      username:
-                        type: string
-                      name:
-                        type: string
-                      email:
-                        type: string
+                    $ref: '#/components/schemas/User'
         '400':
-          description: Error de validación
+          description: Faltan campos obligatorios o error de validacion
 
-  /login:
+  /auth/login:
     post:
-      tags: [Autenticación]
-      summary: Iniciar sesión
+      tags: [Autenticacion]
+      summary: Iniciar sesion
       requestBody:
         required: true
         content:
@@ -82,7 +61,7 @@ paths:
                   format: password
       responses:
         '200':
-          description: Inicio de sesión exitoso
+          description: Inicio de sesion exitoso
           content:
             application/json:
               schema:
@@ -99,13 +78,15 @@ paths:
                         type: string
                       isAdmin:
                         type: boolean
+        '400':
+          description: Usuario y contrasena requeridos
         '401':
-          description: Credenciales inválidas
+          description: Credenciales invalidas
 
-  /recoverPass:
+  /auth/recoverPass:
     post:
-      tags: [Autenticación]
-      summary: Solicitar recuperación de contraseña
+      tags: [Autenticacion]
+      summary: Solicitar recuperacion de contrasena
       requestBody:
         required: true
         content:
@@ -120,21 +101,18 @@ paths:
                   format: email
       responses:
         '200':
-          description: Correo de recuperación enviado
+          description: Correo de recuperacion enviado
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
+                $ref: '#/components/schemas/MessageResponse'
         '400':
-          description: Error de validación
+          description: Email requerido
 
-  /resetPassword:
+  /auth/resetPassword:
     post:
-      tags: [Autenticación]
-      summary: Restablecer contraseña
+      tags: [Autenticacion]
+      summary: Restablecer contrasena
       requestBody:
         required: true
         content:
@@ -152,13 +130,10 @@ paths:
                   format: password
       responses:
         '200':
-          description: Contraseña actualizada correctamente
+          description: Contrasena actualizada correctamente
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
+                $ref: '#/components/schemas/MessageResponse'
         '400':
-          description: Token inválido o expirado
+          description: Token invalido, expirado o faltan datos

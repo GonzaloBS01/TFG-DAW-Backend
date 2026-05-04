@@ -1,0 +1,134 @@
+paths:
+  /custom-requests:
+    post:
+      tags: [Encargos personalizados]
+      summary: Crear una solicitud de encargo personalizado
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomRequestInput'
+      responses:
+        '201':
+          description: Solicitud enviada correctamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  request:
+                    $ref: '#/components/schemas/CustomRequest'
+        '400':
+          description: Error al crear la solicitud
+        '401':
+          description: Token no proporcionado
+        '403':
+          description: Token invalido
+    get:
+      tags: [Encargos personalizados]
+      summary: Obtener todas las solicitudes de encargo
+      description: Endpoint reservado a usuarios administradores.
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Listado de solicitudes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CustomRequest'
+        '401':
+          description: Token no proporcionado
+        '403':
+          description: Acceso solo para administradores
+
+  /custom-requests/{id}/status:
+    put:
+      tags: [Encargos personalizados]
+      summary: Actualizar el estado de una solicitud
+      description: Endpoint reservado a usuarios administradores.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - status
+              properties:
+                status:
+                  type: string
+                  enum: [pending, contacted, completed, rejected]
+      responses:
+        '200':
+          description: Solicitud actualizada correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomRequest'
+        '404':
+          description: Solicitud no encontrada
+        '401':
+          description: Token no proporcionado
+        '403':
+          description: Acceso solo para administradores
+components:
+  schemas:
+    CustomRequestInput:
+      type: object
+      required:
+        - name
+        - email
+        - jewelryType
+        - description
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+        jewelryType:
+          type: string
+          enum: [anillo, colgante, pendientes, pulsera, broche, otro]
+        materials:
+          type: string
+        description:
+          type: string
+        budget:
+          type: string
+        image:
+          type: string
+    CustomRequest:
+      allOf:
+        - $ref: '#/components/schemas/CustomRequestInput'
+        - type: object
+          properties:
+            _id:
+              type: string
+            status:
+              type: string
+              enum: [pending, contacted, completed, rejected]
+              default: pending
+            createdAt:
+              type: string
+              format: date-time
+            updatedAt:
+              type: string
+              format: date-time

@@ -1,11 +1,3 @@
-openapi: 3.0.0
-info:
-  title: API de Productos
-  version: 1.0.0
-  description: API para crear, obtener, actualizar y eliminar productos.
-servers:
-  - url: http://localhost:3000/api/v1/products
-
 paths:
   /products:
     get:
@@ -23,6 +15,7 @@ paths:
     post:
       tags: [Productos]
       summary: Crear un nuevo producto
+      description: Endpoint reservado a administradores. Acepta JSON o multipart/form-data con hasta 10 imagenes en el campo images.
       security:
         - bearerAuth: []
       requestBody:
@@ -30,21 +23,30 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/NewProduct'
+              $ref: '#/components/schemas/ProductInput'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ProductMultipartInput'
       responses:
         '201':
           description: Producto creado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '403':
+          description: Acceso solo para administradores
 
   /products/{id}:
-    parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
     get:
       tags: [Productos]
       summary: Obtener producto por ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
       responses:
         '200':
           description: Producto encontrado
@@ -52,29 +54,59 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Product'
+        '404':
+          description: Producto no encontrado
     put:
       tags: [Productos]
       summary: Actualizar producto
+      description: Endpoint reservado a administradores. Acepta JSON o multipart/form-data con hasta 10 imagenes en el campo images.
       security:
         - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
       requestBody:
         required: true
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/ProductUpdate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ProductMultipartInput'
       responses:
         '200':
           description: Producto actualizado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '403':
+          description: Acceso solo para administradores
+        '404':
+          description: Producto no encontrado
     delete:
       tags: [Productos]
       summary: Eliminar producto
+      description: Endpoint reservado a administradores.
       security:
         - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
       responses:
         '200':
           description: Producto eliminado correctamente
-
+        '403':
+          description: Acceso solo para administradores
+        '404':
+          description: Producto no encontrado
 components:
   schemas:
     Product:
@@ -88,17 +120,31 @@ components:
           type: string
         price:
           type: number
-        stock:
-          type: integer
-        category:
+        type:
           type: string
-        imageUrl:
+        destacado:
+          type: boolean
+        status:
           type: string
-    NewProduct:
+          enum: [available, sold, reserved, building]
+        image:
+          type: string
+        images:
+          type: array
+          items:
+            type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    ProductInput:
       type: object
       required:
         - name
         - price
+        - type
       properties:
         name:
           type: string
@@ -106,12 +152,29 @@ components:
           type: string
         price:
           type: number
-        stock:
-          type: integer
-        category:
+        type:
           type: string
-        imageUrl:
+        destacado:
+          type: boolean
+        status:
           type: string
+          enum: [available, sold, reserved, building]
+        image:
+          type: string
+        images:
+          type: array
+          items:
+            type: string
+    ProductMultipartInput:
+      allOf:
+        - $ref: '#/components/schemas/ProductInput'
+        - type: object
+          properties:
+            images:
+              type: array
+              items:
+                type: string
+                format: binary
     ProductUpdate:
       type: object
       properties:
@@ -121,9 +184,16 @@ components:
           type: string
         price:
           type: number
-        stock:
-          type: integer
-        category:
+        type:
           type: string
-        imageUrl:
+        destacado:
+          type: boolean
+        status:
           type: string
+          enum: [available, sold, reserved, building]
+        image:
+          type: string
+        images:
+          type: array
+          items:
+            type: string

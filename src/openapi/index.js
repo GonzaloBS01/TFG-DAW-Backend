@@ -20,7 +20,10 @@ const authSpec = loadYamlFile('auth.yaml');
 const userSpec = loadYamlFile('user.yaml');
 const productSpec = loadYamlFile('product.yaml');
 const billSpec = loadYamlFile('bill.yaml');
-const cartSpec = loadYamlFile('cart.yaml'); // Añadir esta línea
+const cartSpec = loadYamlFile('cart.yaml');
+const checkoutSpec = loadYamlFile('checkout.yaml');
+const customRequestSpec = loadYamlFile('custom-request.yaml');
+const newsletterSpec = loadYamlFile('newsletter.yaml');
 
 // Añadir justo después de cargar los archivos YAML
 console.log('Archivos cargados:');
@@ -28,7 +31,10 @@ console.log('auth.yaml:', Object.keys(authSpec).length > 0 ? 'Cargado correctame
 console.log('user.yaml:', Object.keys(userSpec).length > 0 ? 'Cargado correctamente' : 'Vacío o con errores');
 console.log('product.yaml:', Object.keys(productSpec).length > 0 ? 'Cargado correctamente' : 'Vacío o con errores');
 console.log('bill.yaml:', Object.keys(billSpec).length > 0 ? 'Cargado correctamente' : 'Vacío o con errores');
-console.log('cart.yaml:', Object.keys(cartSpec).length > 0 ? 'Cargado correctamente' : 'Vacío o con errores'); // Añadir esta línea
+console.log('cart.yaml:', Object.keys(cartSpec).length > 0 ? 'Cargado correctamente' : 'Vacío o con errores');
+console.log('checkout.yaml:', Object.keys(checkoutSpec).length > 0 ? 'Cargado correctamente' : 'Vacío o con errores');
+console.log('custom-request.yaml:', Object.keys(customRequestSpec).length > 0 ? 'Cargado correctamente' : 'Vacío o con errores');
+console.log('newsletter.yaml:', Object.keys(newsletterSpec).length > 0 ? 'Cargado correctamente' : 'Vacío o con errores');
 
 // Función para combinar componentes
 function mergeComponents(target = {}, source) {
@@ -83,13 +89,19 @@ openApiSpec.paths = mergePaths(openApiSpec.paths, authSpec);
 openApiSpec.paths = mergePaths(openApiSpec.paths, userSpec);
 openApiSpec.paths = mergePaths(openApiSpec.paths, productSpec);
 openApiSpec.paths = mergePaths(openApiSpec.paths, billSpec);
-openApiSpec.paths = mergePaths(openApiSpec.paths, cartSpec); // Añadir esta línea
+openApiSpec.paths = mergePaths(openApiSpec.paths, cartSpec);
+openApiSpec.paths = mergePaths(openApiSpec.paths, checkoutSpec);
+openApiSpec.paths = mergePaths(openApiSpec.paths, customRequestSpec);
+openApiSpec.paths = mergePaths(openApiSpec.paths, newsletterSpec);
 
 openApiSpec.components = mergeComponents(openApiSpec.components, authSpec);
 openApiSpec.components = mergeComponents(openApiSpec.components, userSpec);
 openApiSpec.components = mergeComponents(openApiSpec.components, productSpec);
 openApiSpec.components = mergeComponents(openApiSpec.components, billSpec);
-openApiSpec.components = mergeComponents(openApiSpec.components, cartSpec); // Añadir esta línea
+openApiSpec.components = mergeComponents(openApiSpec.components, cartSpec);
+openApiSpec.components = mergeComponents(openApiSpec.components, checkoutSpec);
+openApiSpec.components = mergeComponents(openApiSpec.components, customRequestSpec);
+openApiSpec.components = mergeComponents(openApiSpec.components, newsletterSpec);
 
 // Añadir a index.js antes de la exportación
 console.log('Rutas cargadas:', Object.keys(openApiSpec.paths).length);
@@ -97,6 +109,9 @@ console.log('Rutas de autenticación:', Object.keys(authSpec.paths || {}).length
 console.log('Rutas de usuarios:', Object.keys(userSpec.paths || {}).length);
 console.log('Rutas de productos:', Object.keys(productSpec.paths || {}).length);
 console.log('Rutas de facturas:', Object.keys(billSpec.paths || {}).length);
-console.log('Rutas de carrito:', Object.keys(cartSpec.paths || {}).length); // Añadir esta línea
+console.log('Rutas de carrito:', Object.keys(cartSpec.paths || {}).length);
+console.log('Rutas de checkout:', Object.keys(checkoutSpec.paths || {}).length);
+console.log('Rutas de encargos personalizados:', Object.keys(customRequestSpec.paths || {}).length);
+console.log('Rutas de newsletter:', Object.keys(newsletterSpec.paths || {}).length);
 
 export default openApiSpec;

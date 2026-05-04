@@ -1,16 +1,11 @@
-openapi: 3.0.0
-info:
-  title: API de Usuarios
-  version: 1.0.0
-  description: API para crear, obtener, actualizar y eliminar usuarios.
-servers:
-  - url: http://localhost:3000/api/v1/users
-
 paths:
   /users:
     get:
       tags: [Usuarios]
       summary: Obtener todos los usuarios
+      description: Endpoint reservado a usuarios administradores.
+      security:
+        - bearerAuth: []
       responses:
         '200':
           description: Lista de usuarios obtenida correctamente
@@ -20,9 +15,16 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/User'
+        '401':
+          description: Token no proporcionado
+        '403':
+          description: Acceso solo para administradores
     post:
       tags: [Usuarios]
       summary: Crear un nuevo usuario
+      description: Endpoint reservado a usuarios administradores.
+      security:
+        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -32,27 +34,24 @@ paths:
       responses:
         '201':
           description: Usuario creado correctamente
+        '401':
+          description: Token no proporcionado
+        '403':
+          description: Acceso solo para administradores
 
   /users/{id}:
-    parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-    get:
-      tags: [Usuarios]
-      summary: Obtener usuario por ID
-      responses:
-        '200':
-          description: Usuario encontrado
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
     put:
       tags: [Usuarios]
       summary: Actualizar usuario
+      description: Permitido para el propio usuario o para administradores.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
       requestBody:
         required: true
         content:
@@ -62,13 +61,33 @@ paths:
       responses:
         '200':
           description: Usuario actualizado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '403':
+          description: Acceso denegado
+        '404':
+          description: Usuario no encontrado
     delete:
       tags: [Usuarios]
       summary: Eliminar usuario
+      description: Endpoint reservado a usuarios administradores.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
       responses:
         '200':
           description: Usuario eliminado correctamente
-
+        '403':
+          description: Acceso solo para administradores
+        '404':
+          description: Usuario no encontrado
 components:
   schemas:
     User:
@@ -82,9 +101,20 @@ components:
           type: string
         email:
           type: string
+          format: email
         role:
           type: string
           enum: [user, admin]
+        favourites:
+          type: array
+          items:
+            type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
     NewUser:
       type: object
       required:
@@ -99,8 +129,10 @@ components:
           type: string
         email:
           type: string
+          format: email
         password:
           type: string
+          format: password
         role:
           type: string
           enum: [user, admin]
@@ -108,9 +140,13 @@ components:
     UserUpdate:
       type: object
       properties:
+        username:
+          type: string
         name:
           type: string
         email:
           type: string
+          format: email
         password:
           type: string
+          format: password

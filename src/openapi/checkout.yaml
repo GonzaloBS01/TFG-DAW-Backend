@@ -1,0 +1,57 @@
+paths:
+  /checkout:
+    post:
+      tags: [Checkout]
+      summary: Procesar compra del carrito activo
+      description: Genera una factura, marca los productos como vendidos, procesa el carrito y envia la confirmacion de compra.
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                paymentMethod:
+                  type: string
+                  default: card
+                  description: Metodo de pago seleccionado por el usuario
+                billingAddress:
+                  type: string
+                  description: Direccion de facturacion
+      responses:
+        '201':
+          description: Compra procesada exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Compra procesada exitosamente
+                  orderId:
+                    type: string
+                  bill:
+                    $ref: '#/components/schemas/Bill'
+                  total:
+                    type: number
+                  downloadUrl:
+                    type: string
+        '400':
+          description: El carrito esta vacio o los datos no son validos
+        '401':
+          description: Token no proporcionado
+        '403':
+          description: Token invalido
+components:
+  schemas:
+    CheckoutRequest:
+      type: object
+      properties:
+        paymentMethod:
+          type: string
+          default: card
+        billingAddress:
+          type: string

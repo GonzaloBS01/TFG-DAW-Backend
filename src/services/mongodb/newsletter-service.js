@@ -13,3 +13,7 @@ export async function isAlreadySubscribed(email) {
     const existing = await Newsletter.findOne({ email: email.toLowerCase() });
     return !!existing;
 }
+
+export async function unsubscribeEmail(id) {
+    return Newsletter.findByIdAndDelete(id);
+}
