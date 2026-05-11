@@ -131,3 +131,6 @@ dist
 
 #SonarQube
 .scannerwork
+
+#docs
+/docs
