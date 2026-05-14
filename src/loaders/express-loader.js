@@ -61,7 +61,8 @@ export default function expressLoader(app) {
 
   // Rutas
   app.use('/api/v1', router);
-  app.use((req, res) => {
-    errorMiddleware(new HttpStatusError(404, 'Resource not found'), req, res);
+  app.use((req, res, next) => {
+    next(new HttpStatusError(404, 'Resource not found'));
   });
+  app.use(errorMiddleware);
 }
