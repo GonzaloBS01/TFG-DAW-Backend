@@ -18,6 +18,20 @@ export default function expressLoader(app) {
   app.use(express.urlencoded({ limit: '50mb', extended: true }));
   app.use(morganConfig);
 
+  app.get('/', (req, res) => {
+    res.status(200).json({
+      status: 'ok',
+      message: 'TFG DAW Backend API',
+      docs: '/api/docs',
+      apiBase: '/api/v1',
+      health: '/health',
+    });
+  });
+
+  app.get('/health', (req, res) => {
+    res.status(200).json({ status: 'ok' });
+  });
+
   // Documentación Swagger
   app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
