@@ -107,7 +107,7 @@ function getNewsletterTemplate(subject, message) {
       <div style="padding: 30px;">
         <h2 style="color: #FAFAF8; font-size: 20px; margin: 0 0 20px;">${subject}</h2>
         <div style="color: #D1D5DB; line-height: 1.8; font-size: 15px;">
-          ${message.replace(/\n/g, '<br>')}
+          ${message.replaceAll('\n', '<br>')}
         </div>
       </div>
       <div style="padding: 20px 30px; background-color: #1a1a1a; text-align: center; border-top: 1px solid #333;">
