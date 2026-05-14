@@ -11,7 +11,7 @@ const config = {
     email: process.env.EMAIL_USER,
     password: process.env.EMAIL_PASSWORD,
   },
-  frontendUrl: process.env.FRONTEND_URL || 'http://localhost:3000',
+  frontendUrl: process.env.FRONTEND_URL || 'http://localhost:4200',
 };
 
 export default config;

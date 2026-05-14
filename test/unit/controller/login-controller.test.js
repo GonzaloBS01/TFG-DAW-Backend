@@ -122,6 +122,56 @@ describe('login-controller', () => {
 			});
 			expect(next).not.toHaveBeenCalled();
 		});
+
+		it('devuelve 201 aunque falle el email de registro', async () => {
+			const savedUser = {
+				_id: '1',
+				username: 'juan',
+				name: 'Juan Pérez',
+				email: 'juan@test.com',
+			};
+			req.body = {
+				username: 'juan',
+				name: 'Juan Pérez',
+				email: 'juan@test.com',
+				password: '123456',
+			};
+			bcrypt.hash.mockResolvedValue('hashed-password');
+			saveUser.mockResolvedValue(savedUser);
+			emailService.sendRegistrationEmail.mockRejectedValue(new Error('SMTP error'));
+			jest.spyOn(console, 'warn').mockImplementation(() => {});
+
+			await signIn(req, res, next);
+
+			expect(emailService.sendRegistrationEmail).toHaveBeenCalledWith(savedUser);
+			expect(res.status).toHaveBeenCalledWith(201);
+			expect(res.json).toHaveBeenCalledWith({
+				message: 'Usuario registrado correctamente.',
+				user: savedUser,
+			});
+			expect(next).not.toHaveBeenCalled();
+			console.warn.mockRestore();
+		});
+
+		it('manda 409 al next si username o email ya existe', async () => {
+			req.body = {
+				username: 'juan',
+				name: 'Juan Pérez',
+				email: 'juan@test.com',
+				password: '123456',
+			};
+			bcrypt.hash.mockResolvedValue('hashed-password');
+			saveUser.mockRejectedValue(new Error('Error al guardar el usuario: E11000 duplicate key error collection'));
+
+			await signIn(req, res, next);
+
+			expect(next).toHaveBeenCalledTimes(1);
+			expect(next).toHaveBeenCalledWith(expect.any(HttpStatusError));
+			const error = next.mock.calls[0][0];
+			expect(error.status).toBe(409);
+			expect(error.message).toBe('El usuario o email ya existe.');
+			expect(res.status).not.toHaveBeenCalledWith(201);
+		});
 	});
 
 	describe('logIn', () => {

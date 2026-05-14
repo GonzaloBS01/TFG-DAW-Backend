@@ -6,6 +6,10 @@ import emailService from '../services/email/email-service.js';
 
 const SECRET_KEY = process.env.SECRET_KEY || 'default_secret';
 
+function isDuplicateUserError(error) {
+  return error.message?.includes('E11000') || error.message?.includes('duplicate key');
+}
+
 // Registro
 export async function signIn(req, res, next) {
   try {
@@ -17,10 +21,18 @@ export async function signIn(req, res, next) {
     const user = await saveUser({ username, name, email, password: hashedPassword });
 
     // Enviar correo de bienvenida
-    await emailService.sendRegistrationEmail(user);
+    try {
+      await emailService.sendRegistrationEmail(user);
+    } catch (emailError) {
+      console.warn('Email de registro no enviado:', emailError.message);
+    }
 
     res.status(201).json({ message: 'Usuario registrado correctamente.', user });
   } catch (error) {
+    if (isDuplicateUserError(error)) {
+      return next(new HttpStatusError(409, 'El usuario o email ya existe.'));
+    }
+
     next(error);
   }
 }
