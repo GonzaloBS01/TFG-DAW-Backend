@@ -11,8 +11,29 @@ import { errorMiddleware } from '../middlewares/error-handler.js';
 dotenv.config();
 
 export default function expressLoader(app) {
+  const defaultAllowedOrigins = [
+    'http://localhost:4200',
+    'http://localhost:3000',
+    'http://localhost:5173',
+    'https://tfg-daw-frontend.vercel.app',
+  ];
+
+  const envAllowedOrigins = (process.env.CORS_ORIGIN || '')
+    .split(',')
+    .map((origin) => origin.trim())
+    .filter(Boolean);
+
+  const allowedOrigins = [...new Set([...defaultAllowedOrigins, ...envAllowedOrigins])];
+
   app.use(cors({
-    origin: process.env.CORS_ORIGIN || 'localhost:4200',
+    origin(origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+        return;
+      }
+
+      callback(new Error(`Origin not allowed by CORS: ${origin}`));
+    },
   }));
   app.use(express.json({ limit: '50mb' }));
   app.use(express.urlencoded({ limit: '50mb', extended: true }));
