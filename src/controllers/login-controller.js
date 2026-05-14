@@ -10,6 +10,20 @@ function isDuplicateUserError(error) {
   return error.message?.includes('E11000') || error.message?.includes('duplicate key');
 }
 
+function createAuthResponse(user) {
+  const isAdmin = user.role === 'admin';
+  const token = jwt.sign(
+    { id: user._id, username: user.username, isAdmin },
+    SECRET_KEY,
+    { expiresIn: '4h' },
+  );
+
+  return {
+    token,
+    user: { id: user._id, username: user.username, isAdmin },
+  };
+}
+
 // Registro
 export async function signIn(req, res, next) {
   try {
@@ -27,7 +41,10 @@ export async function signIn(req, res, next) {
       console.warn('Email de registro no enviado:', emailError.message);
     }
 
-    res.status(201).json({ message: 'Usuario registrado correctamente.', user });
+    res.status(201).json({
+      message: 'Usuario registrado correctamente.',
+      ...createAuthResponse(user),
+    });
   } catch (error) {
     if (isDuplicateUserError(error)) {
       return next(new HttpStatusError(409, 'El usuario o email ya existe.'));
@@ -51,13 +68,8 @@ export async function logIn(req, res, next) {
     if (!isPasswordValid) {
       throw new Error();
     }
-    const token = jwt.sign(
-      { id: user._id, username: user.username, isAdmin: user.role === 'admin' },
-      SECRET_KEY,
-      { expiresIn: '4h' },
-    );
 
-    return res.status(200).json({ token, user: { id: user._id, username: user.username, isAdmin: user.role === 'admin' } });
+    return res.status(200).json(createAuthResponse(user));
   } catch (error) {
     next(new HttpStatusError(401, 'Credenciales Inválidas'));
   }

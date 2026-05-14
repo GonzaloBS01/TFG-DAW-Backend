@@ -82,6 +82,7 @@ describe('login-controller', () => {
 			bcrypt.hash.mockResolvedValue('hashed-password');
 			saveUser.mockResolvedValue({ _id: '1', username: 'juan' });
 			emailService.sendRegistrationEmail.mockResolvedValue();
+			jwt.sign.mockReturnValue('jwt-token');
 
 			await signIn(req, res, next);
 
@@ -100,6 +101,7 @@ describe('login-controller', () => {
 				username: 'juan',
 				name: 'Juan Pérez',
 				email: 'juan@test.com',
+				role: 'user',
 			};
 			req.body = {
 				username: 'juan',
@@ -110,15 +112,22 @@ describe('login-controller', () => {
 			bcrypt.hash.mockResolvedValue('hashed-password');
 			saveUser.mockResolvedValue(savedUser);
 			emailService.sendRegistrationEmail.mockResolvedValue();
+			jwt.sign.mockReturnValue('jwt-token');
 
 			await signIn(req, res, next);
 
 			expect(saveUser).toHaveBeenCalledTimes(1);
 			expect(emailService.sendRegistrationEmail).toHaveBeenCalledWith(savedUser);
+			expect(jwt.sign).toHaveBeenCalledWith(
+				{ id: '1', username: 'juan', isAdmin: false },
+				'default_secret',
+				{ expiresIn: '4h' },
+			);
 			expect(res.status).toHaveBeenCalledWith(201);
 			expect(res.json).toHaveBeenCalledWith({
 				message: 'Usuario registrado correctamente.',
-				user: savedUser,
+				token: 'jwt-token',
+				user: { id: '1', username: 'juan', isAdmin: false },
 			});
 			expect(next).not.toHaveBeenCalled();
 		});
@@ -129,6 +138,7 @@ describe('login-controller', () => {
 				username: 'juan',
 				name: 'Juan Pérez',
 				email: 'juan@test.com',
+				role: 'user',
 			};
 			req.body = {
 				username: 'juan',
@@ -139,6 +149,7 @@ describe('login-controller', () => {
 			bcrypt.hash.mockResolvedValue('hashed-password');
 			saveUser.mockResolvedValue(savedUser);
 			emailService.sendRegistrationEmail.mockRejectedValue(new Error('SMTP error'));
+			jwt.sign.mockReturnValue('jwt-token');
 			jest.spyOn(console, 'warn').mockImplementation(() => {});
 
 			await signIn(req, res, next);
@@ -147,7 +158,8 @@ describe('login-controller', () => {
 			expect(res.status).toHaveBeenCalledWith(201);
 			expect(res.json).toHaveBeenCalledWith({
 				message: 'Usuario registrado correctamente.',
-				user: savedUser,
+				token: 'jwt-token',
+				user: { id: '1', username: 'juan', isAdmin: false },
 			});
 			expect(next).not.toHaveBeenCalled();
 			console.warn.mockRestore();

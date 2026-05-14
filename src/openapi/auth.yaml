@@ -35,10 +35,21 @@ paths:
                 properties:
                   message:
                     type: string
+                  token:
+                    type: string
                   user:
-                    $ref: '#/components/schemas/User'
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      username:
+                        type: string
+                      isAdmin:
+                        type: boolean
         '400':
           description: Faltan campos obligatorios o error de validacion
+        '409':
+          description: El usuario o email ya existe
 
   /auth/login:
     post:
