@@ -82,7 +82,7 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        '204':
           description: Usuario eliminado correctamente
         '403':
           description: Acceso solo para administradores

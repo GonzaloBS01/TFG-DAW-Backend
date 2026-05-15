@@ -101,7 +101,7 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        '204':
           description: Producto eliminado correctamente
         '403':
           description: Acceso solo para administradores
