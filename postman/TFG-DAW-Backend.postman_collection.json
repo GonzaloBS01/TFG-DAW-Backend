@@ -343,6 +343,87 @@
           }
         },
         {
+          "name": "Create Product (multipart/form-data)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const response = pm.response.json();",
+                  "if (response._id) {",
+                  "  pm.collectionVariables.set('productId', response._id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "name",
+                  "value": "Producto Demo",
+                  "type": "text"
+                },
+                {
+                  "key": "description",
+                  "value": "Producto creado desde Postman (multipart)",
+                  "type": "text"
+                },
+                {
+                  "key": "price",
+                  "value": "29.99",
+                  "type": "text"
+                },
+                {
+                  "key": "type",
+                  "value": "anillo",
+                  "type": "text"
+                },
+                {
+                  "key": "destacado",
+                  "value": "false",
+                  "type": "text"
+                },
+                {
+                  "key": "status",
+                  "value": "available",
+                  "type": "text"
+                },
+                {
+                  "key": "images",
+                  "type": "file",
+                  "src": [
+                    "/path/to/product-image.jpg"
+                  ]
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/products",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "products"
+              ]
+            }
+          }
+        },
+        {
           "name": "Update Product",
           "request": {
             "auth": {
