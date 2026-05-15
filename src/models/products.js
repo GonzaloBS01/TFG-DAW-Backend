@@ -4,7 +4,7 @@ const productSchema = new mongoose.Schema({
     name: { type: String, required: true },
     description: { type: String },
     price: { type: Number, required: true },
-    type: { type: String, required: true }, // Discriminator key
+    type: { type: String, required: true },
     destacado: { type: Boolean, default: false },
     modifiedAt: { type: Date, default: Date.now },
     status: {
@@ -12,8 +12,8 @@ const productSchema = new mongoose.Schema({
         enum: ['available', 'sold', 'reserved', 'building'],
         default: 'available',
     },
-    image: { type: String }, // URL
-    images: [{ type: String }], // Array for carousel
+    image: { type: String },
+    images: [{ type: String }],
 }, { timestamps: true });
 
 export default mongoose.model('Product', productSchema);

@@ -43,20 +43,19 @@ const shoppingCartSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 // Método para calcular el total del carrito
-shoppingCartSchema.methods.calculateTotal = function() {
+shoppingCartSchema.methods.calculateTotal = function () {
   this.total = this.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
   return this.total;
 };
 
-// Pre-save hook para actualizar el total antes de guardar
-shoppingCartSchema.pre('save', function(next) {
+shoppingCartSchema.pre('save', function (next) {
   this.calculateTotal();
   this.lastActive = new Date();
   next();
 });
 
 // Método estático para encontrar o crear un carrito activo para un usuario
-shoppingCartSchema.statics.findOrCreateByUser = async function(userId) {
+shoppingCartSchema.statics.findOrCreateByUser = async function (userId) {
   let cart = await this.findOne({ user: userId, status: 'active' });
   if (!cart) {
     cart = new this({ user: userId, items: [] });
