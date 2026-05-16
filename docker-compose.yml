@@ -5,12 +5,21 @@ services:
     ports:
       - "2000:9000"
       - "9092:9092"
+    volumes:
+      - sonarqube_data:/opt/sonarqube/data
+      - sonarqube_extensions:/opt/sonarqube/extensions
+      - sonarqube_logs:/opt/sonarqube/logs
+
   mongodb:
     image: "mongo"
     ports:
       - "27017:27017"
     volumes:
       - mongo-data:/data/db
+
 volumes:
   mongo-data:
     driver: local
+  sonarqube_data:
+  sonarqube_extensions:
+  sonarqube_logs:
