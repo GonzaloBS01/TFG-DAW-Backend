@@ -1,13 +1,14 @@
-import { HttpStatusError } from 'common-errors';
 import { saveBill, getAllBills, getBillById, updateBill, deleteBill } from '../services/mongodb/bill-service.js';
 import { generateBillPDF } from '../services/pdf/pdf-service.js';
 
 export async function createBill(req, res, next) {
   try {
-    const savedBill = saveBill(req.body);
+    const savedBill = await saveBill(req.body);
     res.status(201).json(savedBill);
   } catch (error) {
-    next(new HttpStatusError(400, 'Error al crear la factura'));
+    error.status = 400;
+    error.message = 'Error al crear la factura';
+    next(error);
   }
 }
 
@@ -33,6 +34,7 @@ export async function getBillByIdController(req, res, next) {
     next(error);
   }
 }
+
 export async function updateBillController(req, res, next) {
   try {
     const bill = await updateBill(req.params.id, req.body);
@@ -46,6 +48,7 @@ export async function updateBillController(req, res, next) {
     next(error);
   }
 }
+
 export async function deleteBillController(req, res, next) {
   try {
     const bill = await deleteBill(req.params.id);
@@ -53,8 +56,7 @@ export async function deleteBillController(req, res, next) {
       return res.status(404).json({ error: 'Factura no encontrada' });
     }
     res.status(204).send();
-  }
-  catch (error) {
+  } catch (error) {
     error.status = 500;
     error.message = 'Error al eliminar la factura';
     next(error);
@@ -95,7 +97,6 @@ export async function downloadBillPDF(req, res, next) {
     res.setHeader('Content-Length', pdfBuffer.length);
 
     res.send(pdfBuffer);
-
   } catch (error) {
     error.message = 'Error al descargar la factura PDF';
     next(error);

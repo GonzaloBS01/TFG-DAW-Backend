@@ -66,12 +66,16 @@ export async function logIn(req, res, next) {
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
-      throw new Error();
+      throw new Error('Invalid credentials');
     }
 
     return res.status(200).json(createAuthResponse(user));
   } catch (error) {
-    next(new HttpStatusError(401, 'Credenciales Inválidas'));
+    if (error.message === 'Invalid credentials' || error.name === 'JsonWebTokenError') {
+      return next(new HttpStatusError(401, 'Credenciales Inválidas'));
+    }
+
+    next(error);
   }
 }
 

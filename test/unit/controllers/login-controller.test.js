@@ -1,8 +1,8 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { HttpStatusError } from 'common-errors';
-import { signIn, logIn, resetPassword } from '../../../src/controllers/login-controller.js';
-import { getUsernameByCredentials, saveUser, updateUserPassword } from '../../../src/services/mongodb/user-service.js';
+import { recoverPassword, signIn, logIn, resetPassword } from '../../../src/controllers/login-controller.js';
+import { getUserByEmail, getUsernameByCredentials, saveUser, updateUserPassword } from '../../../src/services/mongodb/user-service.js';
 import emailService from '../../../src/services/email/email-service.js';
 
 jest.mock('bcrypt', () => ({
@@ -309,6 +309,38 @@ describe('login-controller', () => {
 			expect(bcrypt.hash).not.toHaveBeenCalled();
 			expect(updateUserPassword).not.toHaveBeenCalled();
 			expect(next).not.toHaveBeenCalled();
+		});
+	});
+
+	describe('recoverPassword', () => {
+		it('devuelve 400 si falta email', async () => {
+			await recoverPassword(req, res, next);
+
+			expect(res.status).toHaveBeenCalledWith(400);
+			expect(res.json).toHaveBeenCalledWith({ message: 'Email requerido.' });
+			expect(getUserByEmail).not.toHaveBeenCalled();
+		});
+
+		it('envía el email de recuperación con token', async () => {
+			req.body = { email: 'juan@test.com' };
+			getUserByEmail.mockResolvedValue({ _id: 'user-id-1', email: 'juan@test.com' });
+			jwt.sign.mockReturnValue('recovery-token');
+			emailService.sendPasswordRecoveryEmail.mockResolvedValue();
+
+			await recoverPassword(req, res, next);
+
+			expect(getUserByEmail).toHaveBeenCalledWith('juan@test.com');
+			expect(jwt.sign).toHaveBeenCalledWith(
+				{ id: 'user-id-1', email: 'juan@test.com' },
+				'default_secret',
+				{ expiresIn: '1h' },
+			);
+			expect(emailService.sendPasswordRecoveryEmail).toHaveBeenCalledWith(
+				{ _id: 'user-id-1', email: 'juan@test.com' },
+				'recovery-token',
+			);
+			expect(res.status).toHaveBeenCalledWith(200);
+			expect(res.json).toHaveBeenCalledWith({ message: 'Se ha enviado un correo para recuperar la contraseña.' });
 		});
 	});
 });

@@ -1,5 +1,9 @@
 {
     "chat.tools.terminal.autoApprove": {
         "npx jest": true
+    },
+    "sonarlint.connectedMode.project": {
+        "connectionId": "http-localhost-2000",
+        "projectKey": "tfg-daw-backend"
     }
 }

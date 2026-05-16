@@ -4,6 +4,7 @@ const config = {
     '\\.[jt]sx?$': 'babel-jest',
   },
   verbose: true,
+  testResultsProcessor: 'jest-sonar-reporter',
 };
 
 export default config;

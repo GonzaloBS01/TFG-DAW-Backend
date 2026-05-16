@@ -113,7 +113,7 @@ export async function generateBillPDF(bill, user) {
         .text('Subtotal:', labelX, doc.y, { width: 100 })
         .text(formatCurrency(totalSubtotal), rightX, doc.y - 12, {
           align: 'right',
-          width: 80
+          width: 80,
         });
 
       doc
@@ -121,7 +121,7 @@ export async function generateBillPDF(bill, user) {
         .text(`IVA (${ivaPercentage}%):`, labelX, doc.y, { width: 100 })
         .text(formatCurrency(iva), rightX, doc.y - 12, {
           align: 'right',
-          width: 80
+          width: 80,
         });
 
       doc.moveDown();
@@ -135,7 +135,7 @@ export async function generateBillPDF(bill, user) {
         .text(formatCurrency(bill.totalAmount), rightX, doc.y - 12, {
           align: 'right',
           width: 80,
-          underline: true
+          underline: true,
         });
 
       // ============================================
@@ -150,7 +150,7 @@ export async function generateBillPDF(bill, user) {
       doc.text(
         `Estado del pedido: ${
           bill.status === 'paid' ? 'Pagado' : bill.status === 'pending' ? 'Pendiente' : 'Cancelado'
-        }`
+        }`,
       );
 
       // ============================================
@@ -165,12 +165,12 @@ export async function generateBillPDF(bill, user) {
         .font('Helvetica')
         .text('Gracias por tu compra. Esta factura es válida sin firma.', {
           align: 'center',
-          color: '#666666'
+          color: '#666666',
         });
 
       doc.fontSize(7).text('Kátodo Ciberjoyería - Factura generada automáticamente', {
         align: 'center',
-        color: '#999999'
+        color: '#999999',
       });
 
       // Finalizar documento
@@ -203,10 +203,10 @@ function formatDate(date) {
     month: '2-digit',
     day: '2-digit',
     hour: '2-digit',
-    minute: '2-digit'
+    minute: '2-digit',
   });
 }
 
 export default {
-  generateBillPDF
+  generateBillPDF,
 };

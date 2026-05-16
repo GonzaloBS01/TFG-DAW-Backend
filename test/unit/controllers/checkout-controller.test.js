@@ -43,6 +43,25 @@ jest.mock('../../../src/models/products.js', () => ({
   },
 }));
 
+function buildCart(items = []) {
+  return {
+    _id: 'cart-1',
+    items,
+    total: 125,
+  };
+}
+
+function buildBill() {
+  return {
+    _id: 'bill-1',
+    totalAmount: 125,
+    createdAt: new Date('2026-04-28T10:00:00.000Z'),
+    products: [],
+    user: 'user-1',
+    status: 'paid',
+  };
+}
+
 describe('checkout-controller', () => {
   let req;
   let res;
@@ -63,25 +82,6 @@ describe('checkout-controller', () => {
     next = jest.fn();
     jest.clearAllMocks();
   });
-
-  function buildCart(items = []) {
-    return {
-      _id: 'cart-1',
-      items,
-      total: 125,
-    };
-  }
-
-  function buildBill() {
-    return {
-      _id: 'bill-1',
-      totalAmount: 125,
-      createdAt: new Date('2026-04-28T10:00:00.000Z'),
-      products: [],
-      user: 'user-1',
-      status: 'paid',
-    };
-  }
 
   it('devuelve 400 si el carrito está vacío', async () => {
     getCartByUserId.mockResolvedValue(buildCart([]));
