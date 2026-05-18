@@ -1,114 +1,107 @@
+
 # TFG-DAW-Backend
 
-Repositorio del backend para el Trabajo de Fin de Grado (TFG) de Desarrollo de Aplicaciones Web.
+Backend RESTful para el Trabajo de Fin de Grado (TFG) de Desarrollo de Aplicaciones Web.
 
-## Descripción
+Breve y funcional: API construida con Node.js, Express y MongoDB, pensada para gestión de usuarios, autenticación, catálogo de productos y procesos de compra.
 
-Este proyecto proporciona la API RESTful para el TFG. Está construido utilizando Node.js y Express, con MongoDB como base de datos. Incluye autenticación, gestión de usuarios, y otras funcionalidades necesarias para la aplicación.
+## Características
 
-## Tecnologías Utilizadas
+- API REST con rutas para usuarios, productos, carrito y facturación.
+- Autenticación basada en JWT.
+- Documentación OpenAPI/Swagger integrada.
+- Envío de correos y generación de PDFs (según configuración de servicios).
+- Tests unitarios con `jest` y análisis estático con `eslint`.
 
-*   **Node.js**: Entorno de ejecución para JavaScript.
-*   **Express**: Framework web para Node.js.
-*   **MongoDB**: Base de datos NoSQL (usando Mongoose como ODM).
-*   **JWT (JSON Web Tokens)**: Para autenticación segura.
-*   **Swagger**: Para la documentación de la API.
-*   **Jest**: Framework de pruebas unitarias.
-*   **Eslint**: Herramienta de linting para asegurar la calidad del código.
+## Tecnologías
 
-## Prerrequisitos
+- Node.js
+- Express
+- MongoDB (Mongoose)
+- JWT
+- Swagger (OpenAPI)
+- Jest
+- ESLint
 
-Asegúrate de tener instalado lo siguiente en tu sistema:
+## Requisitos
 
-*   [Node.js](https://nodejs.org/) (versión recomendada: LTS)
-*   [MongoDB](https://www.mongodb.com/) (local o Atlas)
-*   [npm](https://www.npmjs.com/) (normalmente viene con Node.js)
+- Node.js (recomendado LTS)
+- MongoDB (local o Atlas)
+- npm or yarn
 
-## Instalación
+## Instalación rápida
 
-1.  Clona este repositorio:
+1. Clona el repositorio:
 
-    ```bash
-    git clone <URL_DEL_REPOSITORIO>
-    ```
+```bash
+git clone <URL_DEL_REPOSITORIO>
+cd TFG-DAW-Backend
+```
 
-2.  Navega al directorio del proyecto:
+2. Instala dependencias:
 
-    ```bash
-    cd TFG-DAW-Backend
-    ```
+```bash
+npm install
+```
 
-3.  Instala las dependencias:
+3. Crea y configura el `.env` (usa `.env.template` si existe):
 
-    ```bash
-    npm install
-    ```
+```bash
+cp .env.template .env
+# editar .env con MONGO_URL, SECRET_KEY, EMAIL_USER, etc.
+```
 
-## Configuración
+4. Ejecuta en desarrollo:
 
-1.  Crea un archivo `.env` en la raíz del proyecto basándote en el archivo de plantilla `.env.template`:
+```bash
+npm run dev
+```
 
-    ```bash
-    cp .env.template .env
-    ```
+## Variables de entorno (mínimas)
 
-2.  Abre el archivo `.env` y configura las siguientes variables de entorno:
+- `PORT` — puerto de la API (por defecto 3000)
+- `MONGO_URL` — cadena de conexión a MongoDB
+- `SECRET_KEY` — clave para JWT
+- `EMAIL_USER`, `EMAIL_PASSWORD` — para envío de correos (opcional)
+- `FRONTEND_URL` — origen permitido para CORS (opcional)
 
-    *   `PORT`: Puerto en el que se ejecutará el servidor (ej. 3000).
-    *   `MONGO_URL`: Cadena de conexión a tu base de datos MongoDB.
-    *   `SECRET_KEY`: Clave secreta para firmar los tokens JWT.
-    *   `EMAIL_USER`: Correo electrónico para el envío de notificaciones (si aplica).
-    *   `EMAIL_PASSWORD`: Contraseña o token de aplicación para el correo.
-    *   `FRONTEND_URL`: URL del frontend para CORS.
+## Scripts útiles
 
-## Scripts Disponibles
+- `npm run dev` — modo desarrollo (nodemon)
+- `npm start` — iniciar en producción
+- `npm test` — ejecutar pruebas
+- `npm run test:coverage` — pruebas + cobertura
+- `npm run lint` — ejecutar ESLint
+- `npm run fix` — intentar arreglar problemas de lint
 
-En el directorio del proyecto, puedes ejecutar:
+## Documentación de la API
 
-### `npm run dev`
+Swagger UI está disponible en `http://localhost:<PORT>/api-docs` cuando la app está en ejecución. También hay especificaciones en `src/openapi`.
 
-Ejecuta la aplicación en modo desarrollo utilizando `nodemon`. El servidor se reiniciará automáticamente si realizas cambios en el código.
+## Estructura principal
 
-### `npm start`
+- `src/` — código fuente
+  - `config/`, `controllers/`, `loaders/`, `middlewares/`, `models/`, `router/`, `services/`, `utils/`, `openapi/`
 
-Ejecuta la aplicación en modo producción.
+## Tests y Calidad
 
-### `npm test`
+Usa `npm test` para ejecutar las pruebas unitarias y `npm run lint` para revisar estilo y errores estáticos.
 
-Lanza el runner de pruebas `jest`.
+## Contribuir
 
-### `npm run test:coverage`
-
-Ejecuta las pruebas y genera un reporte de cobertura de código.
-
-### `npm run lint`
-
-Ejecuta `eslint` para analizar el código en busca de problemas y errores de estilo.
-
-### `npm run fix`
-
-Intenta corregir automáticamente los problemas de linting encontrados.
-
-## Estructura del Proyecto
-
-La estructura principal del código fuente se encuentra en la carpeta `src`:
-
-*   `src/config`: Archivos de configuración de la aplicación y base de datos.
-*   `src/controllers`: Controladores que manejan la lógica de las peticiones.
-*   `src/loaders`: Scripts de inicialización (ej. conexión a BBDD).
-*   `src/middlewares`: Middlewares de Express (autenticación, manejo de errores, etc.).
-*   `src/models`: Modelos de Mongoose (esquemas de BBDD).
-*   `src/openapi`: Definiciones para la documentación con Swagger.
-*   `src/router`: Definición de las rutas de la API.
-*   `src/services`: Capa de servicios que contiene la lógica de negocio.
-*   `src/utils`: Funciones de utilidad y helpers.
-
-## API Documentation
-
-La documentación de la API está disponible a través de Swagger UI. Una vez iniciada la aplicación, visita:
-
-`http://localhost:<PORT>/api-docs` (Asegúrate de verificar la ruta exacta en `src/app.js` o `src/index.js`)
+1. Crea una rama de feature: `git checkout -b feat/descripcion`
+2. Haz commits claros y pequeños.
+3. Abre un PR describiendo los cambios.
 
 ## Autor
 
 GonzaloBS01
+
+---
+
+Si quieres, puedo también:
+
+- Añadir badges (build, coverage) al inicio del README.
+- Actualizar `package.json` con un `prepare` o `husky`.
+
+Dime qué prefieres.
