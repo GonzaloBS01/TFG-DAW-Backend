@@ -1,9 +1,10 @@
 {
   "info": {
-    "_postman_id": "6ad0a3f6-0d3a-4f85-9c93-tfg-daw-backend",
+    "_postman_id": "4be7ab70-61af-4697-88ce-012db3853860",
     "name": "TFG-DAW Backend",
     "description": "Coleccion Postman para documentar y validar los endpoints principales de la API REST del proyecto TFG-DAW Backend.",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "39396327"
   },
   "item": [
     {
@@ -33,7 +34,8 @@
                 "signin"
               ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "Login",
@@ -41,7 +43,6 @@
             {
               "listen": "test",
               "script": {
-                "type": "text/javascript",
                 "exec": [
                   "const response = pm.response.json();",
                   "if (response.token) {",
@@ -50,7 +51,10 @@
                   "if (response.user && response.user.id) {",
                   "  pm.collectionVariables.set('userId', response.user.id);",
                   "}"
-                ]
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
               }
             }
           ],
@@ -64,7 +68,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"username\": \"usuario_demo\",\n  \"password\": \"Password123!\"\n}"
+              "raw": "{\n  \"username\": \"gonzalo.belloso\",\n  \"password\": \"gonzalo.belloso123+\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/auth/login",
@@ -76,7 +80,8 @@
                 "login"
               ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "Recover Password",
@@ -102,7 +107,8 @@
                 "recoverPass"
               ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "Reset Password",
@@ -128,7 +134,8 @@
                 "resetPassword"
               ]
             }
-          }
+          },
+          "response": []
         }
       ]
     },
@@ -149,6 +156,7 @@
               ]
             },
             "method": "GET",
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/users",
               "host": [
@@ -158,7 +166,8 @@
                 "users"
               ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "Create User",
@@ -193,7 +202,8 @@
                 "users"
               ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "Update User",
@@ -229,7 +239,8 @@
                 "{{userId}}"
               ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "Delete User",
@@ -245,6 +256,7 @@
               ]
             },
             "method": "DELETE",
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/users/{{userId}}",
               "host": [
@@ -255,7 +267,8 @@
                 "{{userId}}"
               ]
             }
-          }
+          },
+          "response": []
         }
       ]
     },
@@ -266,6 +279,7 @@
           "name": "Get All Products",
           "request": {
             "method": "GET",
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/products",
               "host": [
@@ -275,12 +289,14 @@
                 "products"
               ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "Get Product By ID",
           "request": {
             "method": "GET",
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/products/{{productId}}",
               "host": [
@@ -291,7 +307,8 @@
                 "{{productId}}"
               ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "Create Product",
@@ -340,7 +357,8 @@
                 "products"
               ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "Create Product (multipart/form-data)",
@@ -370,6 +388,7 @@
               ]
             },
             "method": "POST",
+            "header": [],
             "body": {
               "mode": "formdata",
               "formdata": [
@@ -406,9 +425,7 @@
                 {
                   "key": "images",
                   "type": "file",
-                  "src": [
-                    "/path/to/product-image.jpg"
-                  ]
+                  "src": "/path/to/product-image.jpg"
                 }
               ]
             },
@@ -421,7 +438,8 @@
                 "products"
               ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "Update Product",
@@ -457,7 +475,8 @@
                 "{{productId}}"
               ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "Delete Product",
@@ -473,6 +492,7 @@
               ]
             },
             "method": "DELETE",
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/products/{{productId}}",
               "host": [
@@ -483,7 +503,8 @@
                 "{{productId}}"
               ]
             }
-          }
+          },
+          "response": []
         }
       ]
     },
@@ -504,6 +525,7 @@
               ]
             },
             "method": "GET",
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/cart",
               "host": [
@@ -513,7 +535,8 @@
                 "cart"
               ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "Add Item",
@@ -549,7 +572,8 @@
                 "items"
               ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "Update Item Quantity",
@@ -586,7 +610,8 @@
                 "{{productId}}"
               ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "Remove Item",
@@ -602,6 +627,7 @@
               ]
             },
             "method": "DELETE",
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/cart/items/{{productId}}",
               "host": [
@@ -613,7 +639,8 @@
                 "{{productId}}"
               ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "Clear Cart",
@@ -629,6 +656,7 @@
               ]
             },
             "method": "DELETE",
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/cart",
               "host": [
@@ -638,7 +666,8 @@
                 "cart"
               ]
             }
-          }
+          },
+          "response": []
         }
       ]
     },
@@ -692,7 +721,8 @@
                 "checkout"
               ]
             }
-          }
+          },
+          "response": []
         }
       ]
     },
@@ -713,6 +743,7 @@
               ]
             },
             "method": "GET",
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/bills",
               "host": [
@@ -722,7 +753,8 @@
                 "bills"
               ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "Get Bill By ID",
@@ -738,6 +770,7 @@
               ]
             },
             "method": "GET",
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/bills/{{billId}}",
               "host": [
@@ -748,7 +781,8 @@
                 "{{billId}}"
               ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "Download Bill PDF",
@@ -764,6 +798,7 @@
               ]
             },
             "method": "GET",
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/bills/{{billId}}/download",
               "host": [
@@ -775,7 +810,8 @@
                 "download"
               ]
             }
-          }
+          },
+          "response": []
         }
       ]
     },
@@ -829,7 +865,8 @@
                 "custom-requests"
               ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "Get All Custom Requests",
@@ -845,6 +882,7 @@
               ]
             },
             "method": "GET",
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/custom-requests",
               "host": [
@@ -854,7 +892,8 @@
                 "custom-requests"
               ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "Update Custom Request Status",
@@ -891,7 +930,8 @@
                 "status"
               ]
             }
-          }
+          },
+          "response": []
         }
       ]
     },
@@ -935,7 +975,8 @@
                 "subscribe"
               ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "Get Subscribers",
@@ -951,6 +992,7 @@
               ]
             },
             "method": "GET",
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/newsletter/subscribers",
               "host": [
@@ -961,7 +1003,8 @@
                 "subscribers"
               ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "Delete Subscriber",
@@ -977,6 +1020,7 @@
               ]
             },
             "method": "DELETE",
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/newsletter/subscribers/{{subscriberId}}",
               "host": [
@@ -988,7 +1032,8 @@
                 "{{subscriberId}}"
               ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "Send Newsletter",
@@ -1024,7 +1069,8 @@
                 "send"
               ]
             }
-          }
+          },
+          "response": []
         }
       ]
     }
@@ -1032,43 +1078,35 @@
   "variable": [
     {
       "key": "baseUrl",
-      "value": "https://tfg-daw-backend-njil.onrender.com/api/v1",
-      "type": "string"
+      "value": "https://tfg-daw-backend-njil.onrender.com/api/v1"
     },
     {
       "key": "token",
-      "value": "",
-      "type": "string"
+      "value": ""
     },
     {
       "key": "userId",
-      "value": "",
-      "type": "string"
+      "value": ""
     },
     {
       "key": "productId",
-      "value": "",
-      "type": "string"
+      "value": ""
     },
     {
       "key": "billId",
-      "value": "",
-      "type": "string"
+      "value": ""
     },
     {
       "key": "customRequestId",
-      "value": "",
-      "type": "string"
+      "value": ""
     },
     {
       "key": "subscriberId",
-      "value": "",
-      "type": "string"
+      "value": ""
     },
     {
       "key": "resetToken",
-      "value": "",
-      "type": "string"
+      "value": ""
     }
   ]
 }

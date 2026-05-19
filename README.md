@@ -146,11 +146,17 @@ Documentación de la API
 Accede a Swagger UI cuando la app esté en ejecución en:
 
 ```
-http://localhost:<PORT>/api-docs
+http://localhost:2000/api-docs
 ```
 
 Ejemplos rápidos (curl)
 -----------------------
+
+Especificaciones OpenAPI y colección Postman
+-------------------------------------------
+
+- OpenAPI: https://github.com/GonzaloBS01/TFG-DAW-Backend/tree/main/src/openapi
+- Postman: https://github.com/GonzaloBS01/TFG-DAW-Backend/tree/main/postman
 
 Login (ejemplo):
 
@@ -179,25 +185,7 @@ Estructura del proyecto
   - `services/` — lógica de negocio
   - `openapi/` — especificaciones OpenAPI
 
-Contribuir
-----------
-
-1. Crea una rama: `git checkout -b feat/mi-cambio`
-2. Haz commits pequeños y descriptivos.
-3. Abre un Pull Request con la descripción de los cambios.
-
-Preguntas frecuentes / notas
----------------------------
-
-- ¿Dónde están las rutas? Mira `src/router/`.
-- ¿Cómo cambio el puerto? Modifica la variable `PORT` en `.env` o exporta `PORT` en el entorno.
-
 Autor
 -----
 
 GonzaloBS01
-
----
-
-¿Quieres que añada badges (build, coverage) en el encabezado o incluya ejemplos de peticiones más completos (autenticación con token, subida de imágenes)?
-
